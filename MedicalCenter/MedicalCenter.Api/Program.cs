@@ -1,4 +1,6 @@
-using MedicalCenter.Data;
+﻿using MedicalCenter.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.OpenApi.Models;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -15,6 +17,14 @@ try
     builder.Host.UseSerilog((context, services, configuration) => configuration
                .ReadFrom.Configuration(context.Configuration));
 
+    builder.Services.AddAuthorization();
+
+    builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
+    {
+        options.Password.RequiredLength = 8;
+    })
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
     // Add services to the container.
     string? connectionString = builder.Configuration.GetConnectionString("DbConnection");
 
@@ -23,7 +33,36 @@ try
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+
+    builder.Services.AddSwaggerGen(opt =>
+    {
+        opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MedicalCenterAPI", Version = "v1" });
+
+        opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            In = ParameterLocation.Header,
+            Description = "Please enter token",
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            BearerFormat = "JWT",
+            Scheme = "bearer"
+        });
+
+        opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                Array.Empty<string>()
+            }
+        });
+    });
 
     var app = builder.Build();
 
@@ -35,6 +74,8 @@ try
     }
 
     app.UseHttpsRedirection();
+
+    app.MapIdentityApi<IdentityUser>();
 
     app.MapControllers();
 
