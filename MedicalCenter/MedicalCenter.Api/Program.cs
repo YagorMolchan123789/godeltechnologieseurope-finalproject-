@@ -1,4 +1,6 @@
-﻿using MedicalCenter.Data;
+﻿using MedicalCenter.Api.Extensions;
+using MedicalCenter.Data;
+using MedicalCenter.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -19,15 +21,17 @@ try
 
     builder.Services.AddAuthorization();
 
-    builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
+    builder.Services.AddIdentityApiEndpoints<AppUser>(options =>
     {
         options.Password.RequiredLength = 8;
     })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
     // Add services to the container.
     string? connectionString = builder.Configuration.GetConnectionString("DbConnection");
 
+    builder.Services.AddApiServices();
     builder.Services.AddDataServices(connectionString, builder.Environment.IsDevelopment());
 
     builder.Services.AddControllers();
@@ -75,7 +79,7 @@ try
 
     app.UseHttpsRedirection();
 
-    app.MapIdentityApi<IdentityUser>();
+    app.MapCustomIdentityApi<AppUser>();
 
     app.MapControllers();
 
