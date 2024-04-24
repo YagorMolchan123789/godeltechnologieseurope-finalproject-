@@ -1,20 +1,13 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+Medical center
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+# How to run it via docker-compose
+0. Open up the folder containing readme.md and docker-compose.yml with vs code, powershell or cmd.
+1. Run `docker compose -p medical_center build`
+If you have an error please contact someone from teh team.
+2. Run `docker compose -p medical_center up`
+If you have an error please contact someone from teh team.
+3. Now, you should see inside your docker desktop container group with name medical_center. One of them (migrations) will be failed. It's ok.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
-
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
-
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+# How to re-run migrations if you removed DB etc
+Just run migrations container from your docker desktop application

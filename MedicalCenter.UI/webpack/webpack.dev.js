@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = {
   mode: 'development',
@@ -11,5 +12,6 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.name': JSON.stringify('Alchemic'),
     }),
+    new BundleAnalyzerPlugin(),
   ],
 }

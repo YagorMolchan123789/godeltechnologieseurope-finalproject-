@@ -1,5 +1,4 @@
 const webpack = require('webpack')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = {
     mode: 'production', 
@@ -9,7 +8,6 @@ module.exports = {
             {
                 'process.env.name': JSON.stringify('MedClinic'),
             }
-        ),
-        new BundleAnalyzerPlugin(),
+        )
     ],
 }

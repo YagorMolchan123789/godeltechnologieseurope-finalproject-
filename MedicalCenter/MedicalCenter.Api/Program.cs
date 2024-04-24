@@ -2,6 +2,8 @@
 using MedicalCenter.Data;
 using MedicalCenter.Domain;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -37,6 +39,8 @@ try
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
+    
+    builder.Services.AddHealthChecks();
 
     builder.Services.AddSwaggerGen(opt =>
     {
@@ -78,6 +82,8 @@ try
     }
 
     app.UseHttpsRedirection();
+
+    app.MapHealthChecks("/health");
 
     app.MapCustomIdentityApi<AppUser>();
 
