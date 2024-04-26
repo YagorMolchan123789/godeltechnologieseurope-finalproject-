@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MedicalCenter.Data.Repositories;
+using MedicalCenter.Data.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MedicalCenter.Data
@@ -16,6 +18,8 @@ namespace MedicalCenter.Data
             {
                 services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(connectionString));
             }
+
+            services.AddScoped<IDoctorRepository, DoctorRepository>();
 
             return services;
         }

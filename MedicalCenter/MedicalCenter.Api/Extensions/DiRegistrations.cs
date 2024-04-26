@@ -11,6 +11,7 @@ namespace MedicalCenter.Api.Extensions
         {
             services.AddScoped<IValidator<RegisterPatientRequest>, RegisterPatientRequestValidator>();
             services.AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
+            services.AddScoped<IValidator<RegisterDoctorRequest>, RegisterDoctorRequestValidator>();
 
             return services;
         }

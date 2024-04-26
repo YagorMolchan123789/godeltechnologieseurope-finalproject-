@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.Extensions.Options;
+using MedicalCenter.Data.Repositories.Interfaces;
+using MedicalCenter.Data.Repositories;
+using MedicalCenter.Api.Models.Interfaces;
 
 namespace MedicalCenter.Api.Extensions
 {
@@ -21,15 +24,12 @@ namespace MedicalCenter.Api.Extensions
         // Validate the email address using DataAnnotations like the UserValidator does when RequireUniqueEmail = true.
         private static readonly EmailAddressAttribute _emailAddressAttribute = new();
 
-        /// <summary>
-        /// Add endpoints for registering, logging in, and logging out using ASP.NET Core Identity.
-        /// </summary>
-        /// <typeparam name="TUser">The type describing the user. This should match the generic parameter in <see cref="UserManager{TUser}"/>.</typeparam>
-        /// <param name="endpoints">
-        /// The <see cref="IEndpointRouteBuilder"/> to add the identity endpoints to.
-        /// Call <see cref="EndpointRouteBuilderExtensions.MapGroup(IEndpointRouteBuilder, string)"/> to add a prefix to all the endpoints.
-        /// </param>
-        /// <returns>An <see cref="IEndpointConventionBuilder"/> to further customize the added endpoints.</returns>
+        const string IdValidationFailMessage = "The Id is missing or too long!";
+        const string UserNotFoundMessage = "The user is not found!";
+        const string BadRequestStatusCode = "400";
+        const string NotFoundStatusCode = "404";
+        const int UserIdMaxLength = 450;
+
         public static IEndpointConventionBuilder MapCustomIdentityApi<TUser>(this IEndpointRouteBuilder endpoints)
             where TUser : AppUser, new()
         {
@@ -37,7 +37,6 @@ namespace MedicalCenter.Api.Extensions
 
             var timeProvider = endpoints.ServiceProvider.GetRequiredService<TimeProvider>();
             var bearerTokenOptions = endpoints.ServiceProvider.GetRequiredService<IOptionsMonitor<BearerTokenOptions>>();
-            var emailSender = endpoints.ServiceProvider.GetRequiredService<IEmailSender<TUser>>();
             var linkGenerator = endpoints.ServiceProvider.GetRequiredService<LinkGenerator>();
 
             // We'll figure out a unique endpoint name based on the final route pattern during endpoint generation.
@@ -50,11 +49,8 @@ namespace MedicalCenter.Api.Extensions
                 ([FromBody] RegisterPatientRequest registration, HttpContext context, [FromServices] IServiceProvider sp) =>
             {
                 const string RoleName = "patient";
-
-                var userManager = sp.GetRequiredService<UserManager<TUser>>();
-                var roleManager = sp.GetRequiredService<RoleManager<IdentityRole>>();
                 var registerPatientRequestValidator = sp.GetRequiredService<IValidator<RegisterPatientRequest>>();
-
+                
                 var validationResult = await registerPatientRequestValidator.ValidateAsync(registration);
 
                 if (!validationResult.IsValid)
@@ -66,49 +62,10 @@ namespace MedicalCenter.Api.Extensions
                         sb.Append($"Property {failure.PropertyName} failed validation. Error was: {failure.ErrorMessage} ");
                     }
 
-                    return CreateValidationProblem("400", sb.ToString());
+                    return CreateValidationProblem(BadRequestStatusCode, sb.ToString());
                 }
 
-                if (!userManager.SupportsUserEmail)
-                {
-                    throw new NotSupportedException($"{nameof(MapCustomIdentityApi)} requires a user store with email support.");
-                }
-
-                var userStore = sp.GetRequiredService<IUserStore<TUser>>();
-                var emailStore = (IUserEmailStore<TUser>)userStore;
-                var email = registration.Email;
-
-                if (string.IsNullOrEmpty(email) || !_emailAddressAttribute.IsValid(email))
-                {
-                    return CreateValidationProblem(IdentityResult.Failed(userManager.ErrorDescriber.InvalidEmail(email)));
-                }
-
-                var user = new TUser();
-                await userStore.SetUserNameAsync(user, email, CancellationToken.None);
-                await emailStore.SetEmailAsync(user, email, CancellationToken.None);
-
-                user.FirstName = registration.FirstName;
-                user.LastName = registration.LastName;                
-
-                await userStore.UpdateAsync(user, CancellationToken.None);
-
-                var result = await userManager.CreateAsync(user, registration.Password);
-
-                if (!result.Succeeded)
-                {
-                    return CreateValidationProblem(result);
-                }
-
-                var isRoleExists = await roleManager.RoleExistsAsync(RoleName);
-
-                if (!isRoleExists)
-                {
-                    await roleManager.CreateAsync(new IdentityRole(RoleName));
-                }
-
-                await userManager.AddToRoleAsync(user, RoleName);
-
-                return TypedResults.Ok();
+                return await AddUserAsync<TUser>(registration, sp, RoleName);
             });
 
             routeGroup.MapPost("/login", async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>>
@@ -158,7 +115,128 @@ namespace MedicalCenter.Api.Extensions
                 return TypedResults.Empty;
             });
 
+            // NOTE: We cannot inject UserManager<TUser> directly because the TUser generic parameter is currently unsupported by RDG.
+            // https://github.com/dotnet/aspnetcore/issues/47338
+            routeGroup.MapPost("/register-doctor", async Task<Results<Ok, ValidationProblem>>
+                ([FromBody] RegisterDoctorRequest registration, HttpContext context, [FromServices] IServiceProvider sp) =>
+            {
+                const string RoleName = "doctor";
+
+                var registerDoctorRequestValidator = sp.GetRequiredService<IValidator<RegisterDoctorRequest>>();
+
+                var validationResult = await registerDoctorRequestValidator.ValidateAsync(registration);
+
+                if (!validationResult.IsValid)
+                {
+                    var sb = new StringBuilder();
+
+                    foreach (var failure in validationResult.Errors)
+                    {
+                        sb.Append($"Property {failure.PropertyName} failed validation. Error was: {failure.ErrorMessage} ");
+                    }
+
+                    return CreateValidationProblem(BadRequestStatusCode, sb.ToString());
+                }
+
+                return await AddUserAsync<TUser>(registration, sp, RoleName);
+            }).RequireAuthorization("admin");
+
+            routeGroup.MapDelete("/delete-doctor", async Task<Results<NoContent, ValidationProblem>>
+                ([FromBody] DeleteDoctorRequest deleteRequest, HttpContext context, [FromServices] IServiceProvider sp) =>
+            {
+                if (string.IsNullOrEmpty(deleteRequest.Id) || deleteRequest.Id.Length > UserIdMaxLength)
+                {
+                    return CreateValidationProblem(BadRequestStatusCode, IdValidationFailMessage);
+                }
+
+                var userManager = sp.GetRequiredService<UserManager<TUser>>();
+
+                var user = await userManager.FindByIdAsync(deleteRequest.Id);
+
+                if (user is null)
+                {
+                    return CreateValidationProblem(NotFoundStatusCode, UserNotFoundMessage);
+                }
+
+                var result = await userManager.DeleteAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    return CreateValidationProblem(result);
+                }
+
+                return TypedResults.NoContent();
+            }).RequireAuthorization("admin");
+
             return new IdentityEndpointsConventionBuilder(routeGroup);
+        }
+
+        private static async Task<Results<Ok, ValidationProblem>> AddUserAsync<TUser>(
+            IRegisterRequest registration, IServiceProvider sp, string roleName)
+            where TUser : AppUser, new()
+        {
+            var userManager = sp.GetRequiredService<UserManager<TUser>>();
+            var roleManager = sp.GetRequiredService<RoleManager<IdentityRole>>();
+
+            if (!userManager.SupportsUserEmail)
+            {
+                throw new NotSupportedException($"{nameof(MapCustomIdentityApi)} requires a user store with email support.");
+            }
+
+            var userStore = sp.GetRequiredService<IUserStore<TUser>>();
+            var emailStore = (IUserEmailStore<TUser>)userStore;
+            var email = registration.Email;
+
+            if (string.IsNullOrEmpty(email) || !_emailAddressAttribute.IsValid(email))
+            {
+                return CreateValidationProblem(IdentityResult.Failed(userManager.ErrorDescriber.InvalidEmail(email)));
+            }
+
+            var user = new TUser();
+            await userStore.SetUserNameAsync(user, email, CancellationToken.None);
+            await emailStore.SetEmailAsync(user, email, CancellationToken.None);
+
+            user.FirstName = registration.FirstName;
+            user.LastName = registration.LastName;
+
+            await userStore.UpdateAsync(user, CancellationToken.None);
+
+            var result = await userManager.CreateAsync(user, registration.Password);
+
+            if (!result.Succeeded)
+            {
+                return CreateValidationProblem(result);
+            }
+
+            var isRoleExists = await roleManager.RoleExistsAsync(roleName);
+
+            if (!isRoleExists)
+            {
+                await roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+
+            await userManager.AddToRoleAsync(user, roleName);
+
+            if (roleName == "doctor")
+            {
+                var doctorInfo = new DoctorInfo();
+
+                var doctorRegistration = (RegisterDoctorRequest)registration;
+
+                doctorInfo.AppUserId = user.Id;
+                doctorInfo.PracticeStartDate = doctorRegistration.PracticeStartDate;
+                doctorInfo.Specialization = doctorRegistration.Specialization;
+
+                var doctorRepository = sp.GetRequiredService<IDoctorRepository>();
+
+                await doctorRepository.AddAsync(doctorInfo);
+
+                return TypedResults.Ok();
+            }
+            else
+            {
+                return TypedResults.Ok();
+            }
         }
 
         private static ValidationProblem CreateValidationProblem(string errorCode, string errorDescription) =>

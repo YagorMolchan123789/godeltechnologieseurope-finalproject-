@@ -4,6 +4,7 @@ using MedicalCenter.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedicalCenter.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240424151452_AddDoctor")]
+    partial class AddDoctor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,25 +105,6 @@ namespace MedicalCenter.Data.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("AppUser");
 
                     b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("MedicalCenter.Domain.DoctorInfo", b =>
-                {
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("PracticeStartDate")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Specialization")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("AppUserId");
-
-                    b.HasIndex("AppUserId");
-
-                    b.ToTable("DoctorInfos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -256,13 +240,15 @@ namespace MedicalCenter.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MedicalCenter.Domain.DoctorInfo", b =>
+            modelBuilder.Entity("MedicalCenter.Domain.Doctor", b =>
                 {
-                    b.HasOne("MedicalCenter.Domain.AppUser", null)
-                        .WithOne()
-                        .HasForeignKey("MedicalCenter.Domain.DoctorInfo", "AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasBaseType("MedicalCenter.Domain.AppUser");
+
+                    b.Property<string>("Specialty")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasDiscriminator().HasValue("Doctor");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

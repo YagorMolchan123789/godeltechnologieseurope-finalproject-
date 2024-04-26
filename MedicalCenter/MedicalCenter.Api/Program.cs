@@ -21,7 +21,11 @@ try
     builder.Host.UseSerilog((context, services, configuration) => configuration
                .ReadFrom.Configuration(context.Configuration));
 
-    builder.Services.AddAuthorization();
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("doctor", policy => policy.RequireRole("doctor"));
+        options.AddPolicy("admin", policy => policy.RequireRole("admin"));
+    });
 
     builder.Services.AddIdentityApiEndpoints<AppUser>(options =>
     {

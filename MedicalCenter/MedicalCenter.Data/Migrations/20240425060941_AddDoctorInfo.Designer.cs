@@ -4,6 +4,7 @@ using MedicalCenter.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedicalCenter.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240425060941_AddDoctorInfo")]
+    partial class AddDoctorInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,11 +36,6 @@ namespace MedicalCenter.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -98,10 +96,6 @@ namespace MedicalCenter.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("AppUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("MedicalCenter.Domain.DoctorInfo", b =>
@@ -312,15 +306,6 @@ namespace MedicalCenter.Data.Migrations
                     b.HasOne("MedicalCenter.Domain.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MedicalCenter.Domain.Doctor", b =>
-                {
-                    b.HasOne("MedicalCenter.Domain.AppUser", null)
-                        .WithOne()
-                        .HasForeignKey("MedicalCenter.Domain.Doctor", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
