@@ -1,3 +1,47 @@
-h1 {
-  color: brown;
+.nav-header {
+  background-color: #0070ff;
+  height: 50px;
+}
+
+.nav-header .nav-home,
+.nav-security,
+.nav-link {
+  color: white;
+  text-decoration: none;
+}
+
+.home-container {
+  margin-top: 3%;
+  width: 80%;
+  float: left;
+}
+
+.home-container .row {
+  font: 18px Times New Roman;
+  float: left;
+  margin-left: 22%;
+}
+
+.security-container {
+  list-style-type: none;
+  justify-content: space-between;
+  float: right;
+  margin-top: 1%;
+  margin-right: 4%;
+}
+
+.security-container li {
+  display: inline-block;
+}
+
+.security-container > li:first-child {
+  margin-right: 13px;
+}
+
+.security-container .nav-home {
+  padding-top: 0;
+}
+
+.nav-header .nav-home:hover {
+  color: white;
 }
