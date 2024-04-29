@@ -34,6 +34,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\MedicalCenter.Business\MedicalCenter.Business.csproj" />
 	  <ProjectReference Include="..\MedicalCenter.Data\MedicalCenter.Data.csproj" />
+	  <ProjectReference Include="..\MedicalCenter.Domain\MedicalCenter.Domain.csproj" />
 	</ItemGroup>
 
 </Project>

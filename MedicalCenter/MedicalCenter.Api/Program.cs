@@ -3,7 +3,6 @@ using MedicalCenter.Data;
 using MedicalCenter.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -31,14 +30,15 @@ try
     {
         options.Password.RequiredLength = 8;
     })
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+        .AddRoles<IdentityRole>()
+        .AddEntityFrameworkStores<ApplicationDbContext>();
 
     // Add services to the container.
     string? connectionString = builder.Configuration.GetConnectionString("DbConnection");
 
     builder.Services.AddApiServices();
     builder.Services.AddDataServices(connectionString, builder.Environment.IsDevelopment());
+    builder.Services.AddBusinessServices();
 
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -75,8 +75,13 @@ try
             }
         });
     });
+    builder.Services.AddCors();
 
     var app = builder.Build();
+
+    app.UseCors(builder => builder
+        .AllowAnyOrigin()
+        .AllowAnyHeader());
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())

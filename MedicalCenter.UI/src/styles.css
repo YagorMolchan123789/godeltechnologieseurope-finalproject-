@@ -10,18 +10,6 @@
   text-decoration: none;
 }
 
-.home-container {
-  margin-top: 3%;
-  width: 80%;
-  float: left;
-}
-
-.home-container .row {
-  font: 18px Times New Roman;
-  float: left;
-  margin-left: 22%;
-}
-
 .security-container {
   list-style-type: none;
   justify-content: space-between;

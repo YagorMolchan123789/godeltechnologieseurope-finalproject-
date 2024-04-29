@@ -7,6 +7,7 @@ module.exports = {
         new webpack.DefinePlugin(
             {
                 'process.env.name': JSON.stringify('MedClinic'),
+                'process.env': JSON.stringify(process.env)
             }
         )
     ],

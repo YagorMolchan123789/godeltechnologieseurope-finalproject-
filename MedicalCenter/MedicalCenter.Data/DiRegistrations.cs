@@ -19,6 +19,8 @@ namespace MedicalCenter.Data
                 services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(connectionString));
             }
 
+            services.AddTransient<ITimeSlotRepository, TimeSlotRepository>();
+            services.AddTransient<IAppointmentRepository, AppointmentRepository>();
             services.AddScoped<IDoctorRepository, DoctorRepository>();
 
             return services;

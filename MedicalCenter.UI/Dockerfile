@@ -1,5 +1,6 @@
 # Base image
 FROM node:14 AS build
+ARG API_URL
 WORKDIR /app
 
 # Install dependencies
@@ -8,7 +9,7 @@ RUN npm install
 
 # Build the app
 COPY . .
-RUN npm run build
+RUN export REACT_APP_API_URL=${API_URL} && env && npm run build
 
 # Final image
 FROM nginx:stable-alpine

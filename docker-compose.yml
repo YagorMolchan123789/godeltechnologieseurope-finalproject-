@@ -51,5 +51,7 @@ services:
     build:
       context: ./MedicalCenter.UI
       dockerfile: ./Dockerfile
+      args:
+        API_URL: http://localhost:5000/
     depends_on:
       - api
