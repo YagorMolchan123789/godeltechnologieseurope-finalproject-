@@ -50,7 +50,7 @@ namespace MedicalCenter.Api.Extensions
             {
                 const string RoleName = "patient";
                 var registerPatientRequestValidator = sp.GetRequiredService<IValidator<RegisterPatientRequest>>();
-                
+
                 var validationResult = await registerPatientRequestValidator.ValidateAsync(registration);
 
                 if (!validationResult.IsValid)
@@ -167,6 +167,21 @@ namespace MedicalCenter.Api.Extensions
 
                 return TypedResults.NoContent();
             }).RequireAuthorization("admin");
+
+            routeGroup.MapPost("/logout", async Task<Results<Ok, UnauthorizedHttpResult>>
+                ([FromBody] object empty, [FromServices] IServiceProvider sp) =>
+            {
+                var signInManager = sp.GetService<SignInManager<TUser>>();
+
+                if (empty != null)
+                {
+                    await signInManager!.SignOutAsync();
+                    return TypedResults.Ok();
+                }
+
+                return TypedResults.Unauthorized();
+
+            }).RequireAuthorization();
 
             return new IdentityEndpointsConventionBuilder(routeGroup);
         }

@@ -1,10 +1,14 @@
 import { App } from './App';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { AppointmentTimeForm } from './components/AppointmentTimeForm';
-import { Home } from './components/Home';
+import { AppointmentTimeForm } from './components/AppointmentTimeForm/AppointmentTimeForm';
+import { Home } from './components/Home/Home';
 import ErrorPage from './components/ErrorPage/ErrorPage';
 import DoctorGrid from './components/doctors/DoctorGrid';
+import Login from './components/Login/Login';
+import Register from './components/Register/Register';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './global.css';
 
 const router = createBrowserRouter([
     {
@@ -23,6 +27,14 @@ const router = createBrowserRouter([
             {
                 path: 'doctors',
                 element: <DoctorGrid />,
+            },
+            {
+                path: '/login',
+                element: <Login />,
+            },
+            {
+                path: '/register',
+                element: <Register />,
             },
         ],
     },

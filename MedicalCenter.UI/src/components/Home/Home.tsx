@@ -1,8 +1,8 @@
 import { Col, Row } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import 'react-toastify/dist/ReactToastify.css';
-import MEDICALCENTER from '../img/medicalcenter.png';
-import '../styles.css';
+import MEDICALCENTER from '../../img/medicalcenter.png';
+import './Home.css';
 
 export const Home = () => {
     return (
