@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState, ChangeEvent } from 'react';
+import { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
@@ -37,7 +37,7 @@ export const AppointmentTimeForm = () => {
     const [date, setDate] = useState<string>('');
     const [selectedTimeSlot, setSelectedTimeSlot] = useState<number>(0);
 
-    const loadTimeSlots = async (e: ChangeEvent<HTMLSelectElement>) => {
+    const loadTimeSlots = async (e: React.ChangeEvent<HTMLDataElement>) => {
         const selectedDate = e.target.value;
 
         setDate(selectedDate);
@@ -54,7 +54,7 @@ export const AppointmentTimeForm = () => {
         const url = API_URL + 'api/timeslot/available';
 
         const requestParams: GetTimeSlotsRequest = {
-            doctorId: doctorId,
+            doctorId: doctorId ?? '',
             date: selectedDate,
         };
 
@@ -82,7 +82,7 @@ export const AppointmentTimeForm = () => {
         }
     };
 
-    const handleSubmit = async (e: SubmitEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         await createAppointment();
 
@@ -144,7 +144,9 @@ export const AppointmentTimeForm = () => {
                     className="mb-3"
                     aria-label="Select time for appointment"
                     name="timeSlotId"
-                    onChange={(e) => setSelectedTimeSlot(e.target.value)}
+                    onChange={(e) =>
+                        setSelectedTimeSlot(Number(e.target.value))
+                    }
                 >
                     <option>{'Select time for appointment'}</option>
                     {timeSlotsData.timeSlots.map((timeSlot: TimeSlot) => (

@@ -1,35 +1,72 @@
 .nav-header {
-  background-color: #0070ff;
-  height: 50px;
+    background-color: #0070ff;
+    height: 50px;
 }
 
 .nav-header .nav-home,
 .nav-security,
 .nav-link {
-  color: white;
-  text-decoration: none;
+    color: white;
+    text-decoration: none;
 }
 
 .security-container {
-  list-style-type: none;
-  justify-content: space-between;
-  float: right;
-  margin-top: 1%;
-  margin-right: 4%;
+    list-style-type: none;
+    justify-content: space-between;
+    float: right;
+    margin-top: 1%;
+    margin-right: 4%;
 }
 
 .security-container li {
-  display: inline-block;
+    display: inline-block;
 }
 
 .security-container > li:first-child {
-  margin-right: 13px;
+    margin-right: 13px;
 }
 
 .security-container .nav-home {
-  padding-top: 0;
+    padding-top: 0;
 }
 
 .nav-header .nav-home:hover {
-  color: white;
+    color: white;
+}
+
+.custom-col {
+    padding: 8px;
+}
+
+.doctor-row-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.doctor-col {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 0 10px;
+}
+
+.doctor-card {
+    width: 22rem;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.doctor-card-title {
+    font-size: 24px;
+}
+
+.doctor-card-body {
+    padding: 15px;
+}
+
+.doctors-page-title {
+    text-align: center;
+    margin: 2rem 0;
 }

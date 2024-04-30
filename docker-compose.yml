@@ -1,25 +1,6 @@
 version: '3.4'
 
 services:
-  api:
-    image: api
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DbConnection=Server=db;Database=MedicalCenter;User=sa;Password=QWERTy!123456789;TrustServerCertificate=True;
-    ports:
-      - 5000:8080
-      - 5001:8081
-    build:
-      context: ./MedicalCenter
-      dockerfile: ./Dockerfile
-    depends_on:
-      - db
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/healthcheck"]
-      interval: 10s
-      timeout: 5s
-      retries: 2
-
   migrations:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -32,6 +13,11 @@ services:
       target: migrations
     depends_on:
         - db
+    healthcheck:
+      test: ["CMD", "ping", "127.0.0.1", "-n", "11", ">", "nul"]
+      interval: 10s
+      timeout: 15s
+      retries: 1
 
   db:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
@@ -43,7 +29,31 @@ services:
     ports:
         - "5033:1433"
         - "5034:1434"
-
+    healthcheck:
+        interval: 10s
+        timeout: 3s
+        retries: 10
+        start_period: 10s
+        test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "QWERTy!123456789" -Q "SELECT * FROM Doctors" || exit 1
+  api:
+    image: api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DbConnection=Server=db;Database=MedicalCenter;User=sa;Password=QWERTy!123456789;TrustServerCertificate=True;
+    ports:
+      - 5000:8080
+      - 5001:8081
+    build:
+      context: ./MedicalCenter
+      dockerfile: ./Dockerfile
+    depends_on:
+      - migrations
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/healthcheck"]
+      interval: 10s
+      timeout: 30s
+      retries: 3
+      
   ui:
     image: ui
     ports:

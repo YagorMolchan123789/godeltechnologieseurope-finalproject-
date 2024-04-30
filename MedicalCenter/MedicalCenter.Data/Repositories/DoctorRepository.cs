@@ -15,12 +15,12 @@ namespace MedicalCenter.Data.Repositories
 
         public async Task<List<DoctorInfo>> GetAllAsync()
         {
-            return await _dbContext.Set<DoctorInfo>().ToListAsync();
+            return await _dbContext.DoctorInfos.ToListAsync();
         }
 
         public async Task AddAsync(DoctorInfo doctor)
         {
-            _dbContext.Set<DoctorInfo>().Add(doctor);
+            _dbContext.DoctorInfos.Add(doctor);
             await _dbContext.SaveChangesAsync();
         }
     }

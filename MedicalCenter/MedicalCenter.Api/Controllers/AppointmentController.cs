@@ -9,7 +9,6 @@ namespace MedicalCenter.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class AppointmentController(
         UserManager<AppUser> userManager,
         IAppointmentService appointmentService
@@ -20,10 +19,10 @@ namespace MedicalCenter.Api.Controllers
         {
             var user = await userManager.GetUserAsync(User);
 
-            if (user is null)
-            {
-                return Unauthorized();
-            }
+            //if (user is null)
+            //{
+            //    return Unauthorized();
+            //}
 
             var doctor = await userManager.FindByIdAsync(model.DoctorId);
 
@@ -42,6 +41,7 @@ namespace MedicalCenter.Api.Controllers
             }
 
             return Created("/user/appointments", model);
+
         }
     }
 }

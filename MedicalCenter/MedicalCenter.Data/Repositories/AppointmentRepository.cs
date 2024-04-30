@@ -14,9 +14,9 @@ namespace MedicalCenter.Data.Repositories
             return appointment;
         }
 
-        public async Task<bool> IsAnyAsync(DateOnly dateOnly, int timeSlotId)
+        public async Task<bool> IsAnyAsync(string doctorId, DateOnly dateOnly, int timeSlotId)
         {
-            return await context.Appointments.AnyAsync(a => a.Date == dateOnly && a.TimeSlotId == timeSlotId);
+            return await context.Appointments.AnyAsync(a => a.DoctorId == doctorId && a.Date == dateOnly && a.TimeSlotId == timeSlotId);
         }
     }
 }

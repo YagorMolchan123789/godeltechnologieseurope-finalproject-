@@ -8,7 +8,6 @@ namespace MedicalCenter.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class TimeSlotController(
         UserManager<AppUser> userManager, 
         ITimeSlotService timeSlotService) : ControllerBase

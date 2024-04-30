@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace MedicalCenter.Data
 {
-    public static class DiRegistrations
+    public static class DiSetupDataLayer
     {
         public static IServiceCollection AddDataServices(this IServiceCollection services, string? connectionString, bool isDevelopment)
         {

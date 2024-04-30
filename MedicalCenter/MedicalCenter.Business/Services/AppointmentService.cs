@@ -10,7 +10,7 @@ namespace MedicalCenter.Business.Services
     {
         public async Task CreateAppointmentAsync(string patientId, CreateAppointmentModel model)
         {
-            if (await appointmentRepository.IsAnyAsync(model.Date, model.TimeSlotId))
+            if (await appointmentRepository.IsAnyAsync(model.DoctorId, model.Date, model.TimeSlotId))
             {
                 throw new ArgumentException("This time already reserved");
             }

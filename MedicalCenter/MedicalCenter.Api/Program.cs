@@ -1,4 +1,6 @@
 ﻿using MedicalCenter.Api.Extensions;
+using MedicalCenter.Api.Helpers.Mappers;
+using MedicalCenter.Business;
 using MedicalCenter.Data;
 using MedicalCenter.Domain;
 using Microsoft.AspNetCore.Identity;
@@ -41,9 +43,12 @@ try
     builder.Services.AddBusinessServices();
 
     builder.Services.AddControllers();
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
-    
+
+    builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
+
     builder.Services.AddHealthChecks();
 
     builder.Services.AddSwaggerGen(opt =>
@@ -75,8 +80,15 @@ try
             }
         });
     });
-    builder.Services.AddCors();
 
+    builder.Services.AddCors(opt =>
+    {
+        opt.AddPolicy("CorsPolicy", policyBuilder =>
+        {
+            policyBuilder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:8080");
+        });
+    });
+    
     var app = builder.Build();
 
     app.UseCors(builder => builder
@@ -97,6 +109,8 @@ try
     app.MapCustomIdentityApi<AppUser>();
 
     app.MapControllers();
+
+    await DoctorSeedData.CreateDoctorsAccountAsync(app.Services);
 
     await app.RunAsync();
 }
