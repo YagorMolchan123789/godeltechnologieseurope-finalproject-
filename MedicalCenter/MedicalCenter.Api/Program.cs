@@ -85,15 +85,16 @@ try
     {
         opt.AddPolicy("CorsPolicy", policyBuilder =>
         {
-            policyBuilder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:8080");
+            policyBuilder.AllowAnyHeader()
+                         .AllowAnyMethod()
+                         .WithOrigins("http://localhost:8080")
+                         .AllowCredentials();
         });
     });
-    
+
     var app = builder.Build();
 
-    app.UseCors(builder => builder.AllowAnyOrigin()
-                                  .AllowAnyHeader()
-                                  .AllowAnyMethod());
+    app.UseCors("CorsPolicy");
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
@@ -111,6 +112,7 @@ try
     app.MapControllers();
 
     await DoctorSeedData.CreateDoctorsAccountAsync(app.Services);
+    await AdminSeedData.CreateAdminAccountAsync(app.Services);
 
     await app.RunAsync();
 }

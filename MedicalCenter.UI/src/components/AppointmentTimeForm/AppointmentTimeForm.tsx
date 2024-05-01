@@ -31,6 +31,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const AppointmentTimeForm = () => {
     const params = useParams();
     const doctorId = params.doctorId;
+    const accessToken = localStorage.getItem('accessToken');
 
     const location = useLocation();
     const { doctor } = location.state;
@@ -43,6 +44,14 @@ export const AppointmentTimeForm = () => {
 
     const [date, setDate] = useState<string>('');
     const [selectedTimeSlot, setSelectedTimeSlot] = useState<number>(0);
+
+    const headers = {
+        Authorization: accessToken,
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*',
+        Allow: '*',
+    };
 
     const loadTimeSlots = async (e: React.ChangeEvent<HTMLDataElement>) => {
         const selectedDate = e.target.value;
@@ -68,7 +77,7 @@ export const AppointmentTimeForm = () => {
 
         const api = axios.create({
             baseURL: url,
-            headers: {},
+            headers: headers,
         });
 
         try {

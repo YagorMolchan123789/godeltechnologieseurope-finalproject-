@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.Extensions.Options;
 using MedicalCenter.Data.Repositories.Interfaces;
-using MedicalCenter.Data.Repositories;
 using MedicalCenter.Api.Models.Interfaces;
 
 namespace MedicalCenter.Api.Extensions
@@ -167,6 +166,9 @@ namespace MedicalCenter.Api.Extensions
 
                 return TypedResults.NoContent();
             }).RequireAuthorization("admin");
+
+            routeGroup.MapGet("/check-admin", () => TypedResults.Ok())
+                .RequireAuthorization("admin");
 
             routeGroup.MapPost("/logout", async Task<Results<Ok, UnauthorizedHttpResult>>
                 ([FromBody] object empty, [FromServices] IServiceProvider sp) =>

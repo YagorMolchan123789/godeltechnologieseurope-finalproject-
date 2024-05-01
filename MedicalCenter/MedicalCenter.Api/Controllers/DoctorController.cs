@@ -1,11 +1,13 @@
 ﻿using MedicalCenter.Api.Helpers.Mappers;
 using MedicalCenter.Business.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalCenter.Api.Controllers
 {
     [ApiController]
     [Route("api")]
+    [Authorize]
     public class DoctorController : Controller
     {
         private readonly IDoctorService _doctorService;
