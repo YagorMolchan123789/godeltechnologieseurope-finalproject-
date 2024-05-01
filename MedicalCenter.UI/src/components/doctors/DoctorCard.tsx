@@ -29,7 +29,10 @@ function DoctorCard({ doctor }: Props) {
                     {new Date().getFullYear() - doctor.practiceStartDate} years
                     of practice
                 </Card.Text>
-                <Link to={'/../appointment/create/' + doctor.appUserId}>
+                <Link
+                    state={{ doctor: doctor }}
+                    to={'/../appointment/create/' + doctor.appUserId}
+                >
                     <Button variant="primary">Choose time</Button>
                 </Link>
             </Card.Body>

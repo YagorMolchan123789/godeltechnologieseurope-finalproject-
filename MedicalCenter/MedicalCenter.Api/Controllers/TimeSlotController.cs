@@ -1,4 +1,5 @@
-﻿using MedicalCenter.Business.Interfaces;
+﻿using MedicalCenter.Api.Models;
+using MedicalCenter.Business.Interfaces;
 using MedicalCenter.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +26,14 @@ namespace MedicalCenter.Api.Controllers
                 }
 
                 var timeSlots = await timeSlotService.GetAvailableTimeSlotsAsync(doctorId, date);
-                return Ok(timeSlots);
+
+                var result = new GetAvailableTimeSlotsResponse()
+                {
+                    timeSlots = timeSlots,
+                    CurrentTime = TimeOnly.FromDateTime(DateTime.Now)
+                };
+
+                return Ok(result);
             }
             catch (Exception ex)
             {

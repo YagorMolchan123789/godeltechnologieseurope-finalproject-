@@ -5,7 +5,9 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Alert from 'react-bootstrap/Alert';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
+import { Col } from 'react-bootstrap';
+import DoctorImage from '../doctors/DoctorImage';
 
 interface TimeSlot {
     id: number;
@@ -15,6 +17,7 @@ interface TimeSlot {
 
 interface TimeSlotsData {
     isLoading: boolean;
+    currentTime: string;
     timeSlots: TimeSlot[];
 }
 
@@ -29,8 +32,12 @@ export const AppointmentTimeForm = () => {
     const params = useParams();
     const doctorId = params.doctorId;
 
+    const location = useLocation();
+    const { doctor } = location.state;
+
     const [timeSlotsData, setTimeSlotsData] = useState<TimeSlotsData>({
         isLoading: true,
+        currentTime: '',
         timeSlots: [],
     });
 
@@ -44,6 +51,7 @@ export const AppointmentTimeForm = () => {
         setSelectedTimeSlot(0);
         setTimeSlotsData({
             isLoading: true,
+            currentTime: '',
             timeSlots: [],
         });
 
@@ -64,12 +72,13 @@ export const AppointmentTimeForm = () => {
         });
 
         try {
-            const { data } = await api.get<TimeSlot[]>(url, {
+            const { data } = await api.get<TimeSlotsData>(url, {
                 params: requestParams,
             });
             setTimeSlotsData({
                 isLoading: false,
-                timeSlots: data.map((t) => {
+                currentTime: removeSeconds(data.currentTime),
+                timeSlots: data.timeSlots.map((t) => {
                     return {
                         id: t.id,
                         startTime: removeSeconds(t.startTime),
@@ -89,6 +98,7 @@ export const AppointmentTimeForm = () => {
         setDate('');
         setTimeSlotsData({
             isLoading: true,
+            currentTime: '',
             timeSlots: [],
         });
     };
@@ -140,50 +150,72 @@ export const AppointmentTimeForm = () => {
 
         if (!timeSlotsData.isLoading) {
             return (
-                <Form.Select
-                    className="mb-3"
-                    aria-label="Select time for appointment"
-                    name="timeSlotId"
-                    onChange={(e) =>
-                        setSelectedTimeSlot(Number(e.target.value))
-                    }
-                >
-                    <option>{'Select time for appointment'}</option>
-                    {timeSlotsData.timeSlots.map((timeSlot: TimeSlot) => (
-                        <option key={timeSlot.id} value={timeSlot.id}>
-                            {`${timeSlot.startTime} - ${timeSlot.endTime}`}
-                        </option>
-                    ))}
-                </Form.Select>
+                <Form.Group className="mb-3" controlId="selectDate">
+                    <Form.Label className="mb-3">
+                        Current time: {timeSlotsData.currentTime}
+                    </Form.Label>
+                    <Form.Select
+                        aria-label="Select time for appointment"
+                        name="timeSlotId"
+                        onChange={(e) =>
+                            setSelectedTimeSlot(Number(e.target.value))
+                        }
+                    >
+                        <option>{'Select time for appointment'}</option>
+                        {timeSlotsData.timeSlots.map((timeSlot: TimeSlot) => (
+                            <option key={timeSlot.id} value={timeSlot.id}>
+                                {`${timeSlot.startTime} - ${timeSlot.endTime}`}
+                            </option>
+                        ))}
+                    </Form.Select>
+                </Form.Group>
             );
         }
     };
 
     return (
-        <Row>
-            <Form className="col-md-3 mx-auto" onSubmit={handleSubmit}>
-                <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlInput1"
-                >
-                    <Form.Label>Date of visit</Form.Label>
-                    <Form.Control
-                        type="date"
-                        placeholder="Select date"
-                        value={date}
-                        onChange={loadTimeSlots}
+        <>
+            <Row className="justify-content-center align-items-center mt-3">
+                <Col xs={10} sm={6} md={3} lg={4}>
+                    <DoctorImage
+                        imageUrl={doctor.photoUrl}
+                        style={{ maxWidth: '100%', height: 'auto' }}
                     />
-                </Form.Group>
-                {date && timeSelectInput()}
-                <Button
-                    className="mb-3"
-                    type="submit"
-                    variant={date && selectedTimeSlot ? 'primary' : 'secondary'}
-                    disabled={date && selectedTimeSlot ? false : true}
-                >
-                    Create Appointment
-                </Button>
-            </Form>
-        </Row>
+                </Col>
+                <Col xs={12} sm={6} md={3} lg={4}>
+                    <h1>{`${doctor.firstName} ${doctor.lastName}`}</h1>
+                    Specialization: {doctor.specialization}
+                    <hr />
+                    {new Date().getFullYear() - doctor.practiceStartDate} years
+                    of practice
+                    <hr />
+                    <Form className="mx-auto" onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3" controlId="selectDate">
+                            <Form.Label>Date of visit</Form.Label>
+                            <Form.Control
+                                type="date"
+                                min={new Date().toISOString().split('T')[0]}
+                                placeholder="Select date"
+                                value={date}
+                                onChange={loadTimeSlots}
+                            />
+                        </Form.Group>
+                        {date && timeSelectInput()}
+                        <Button
+                            className="mb-3"
+                            type="submit"
+                            variant={
+                                date && selectedTimeSlot
+                                    ? 'primary'
+                                    : 'secondary'
+                            }
+                            disabled={date && selectedTimeSlot ? false : true}
+                        >
+                            Create Appointment
+                        </Button>
+                    </Form>
+                </Col>
+            </Row>
+        </>
     );
 };
