@@ -6,11 +6,11 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-    const minEmailLength: number = 5;
-    const maxEmailLength: number = 256;
+    const minLoginLength: number = 5;
+    const maxLoginLength: number = 256;
     const minPasswordLength: number = 8;
     const maxPasswordLength: number = 20;
-    const urlLogin: string = process.env.REACT_APP_API_URL + 'login';
+    const urlLogin: string = process.env.REACT_APP_API_URL + 'api/login';
 
     const inputEmail = useRef<HTMLInputElement>(null);
     const inputPassword = useRef<HTMLInputElement>(null);
@@ -26,7 +26,7 @@ export default function Login() {
 
     const navigate = useNavigate();
 
-    async function registerHandler() {
+    async function loginHandler() {
         setValidated(false);
         setInfoMessage('');
         setInfoMessageClass('');
@@ -65,8 +65,8 @@ export default function Login() {
         function validateForm(): boolean {
             if (
                 emailValue === undefined ||
-                emailValue.length < minEmailLength ||
-                emailValue.length > maxEmailLength
+                emailValue.length < minLoginLength ||
+                emailValue.length > maxLoginLength
             )
                 return false;
 
@@ -86,12 +86,13 @@ export default function Login() {
             <h1>Login</h1>
             <Form ref={form} validated={validated}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
+                    <Form.Label>Login</Form.Label>
                     <Form.Control
                         type="email"
                         placeholder="Enter your Email"
                         required
-                        maxLength={maxEmailLength}
+                        minLength={minLoginLength}
+                        maxLength={maxLoginLength}
                         ref={inputEmail}
                     />
                 </Form.Group>
@@ -107,7 +108,12 @@ export default function Login() {
                     />
                 </Form.Group>
 
-                <Button variant="primary" onClick={registerHandler}>
+                <Button
+                    variant="primary"
+                    onClick={() => {
+                        loginHandler();
+                    }}
+                >
                     Submit
                 </Button>
             </Form>

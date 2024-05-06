@@ -1,4 +1,6 @@
-﻿using MedicalCenter.Api.Extensions;
+﻿using System.Reflection;
+using Asp.Versioning;
+using MedicalCenter.Api.Extensions;
 using MedicalCenter.Business;
 using MedicalCenter.Data;
 using MedicalCenter.Data.Entities;
@@ -78,6 +80,27 @@ try
                 Array.Empty<string>()
             }
         });
+
+        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        opt.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    });
+
+    var apiVersioningBuilder = builder.Services.AddApiVersioning(o =>
+    {
+        o.AssumeDefaultVersionWhenUnspecified = true;
+        o.DefaultApiVersion = new ApiVersion(1, 0);
+        o.ReportApiVersions = true;
+        o.ApiVersionReader = ApiVersionReader.Combine(
+            new QueryStringApiVersionReader("api-version"),
+            new HeaderApiVersionReader("X-Version"),
+            new MediaTypeApiVersionReader("ver"));
+    });
+
+    apiVersioningBuilder.AddApiExplorer(
+    options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+        options.SubstituteApiVersionInUrl = true;
     });
 
     builder.Services.AddCors(opt =>
@@ -86,7 +109,7 @@ try
         {
             policyBuilder.AllowAnyHeader()
                          .AllowAnyMethod()
-                         .WithOrigins("http://localhost:8080")
+                         .WithOrigins("http://localhost:8080", "http://localhost:88")
                          .AllowCredentials();
         });
     });
@@ -105,8 +128,6 @@ try
     app.UseHttpsRedirection();
 
     app.MapHealthChecks("/health");
-
-    app.MapCustomIdentityApi<AppUser>();
 
     app.MapControllers();
 

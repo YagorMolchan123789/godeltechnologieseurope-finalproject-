@@ -116,11 +116,17 @@ export const AppointmentTimeForm = () => {
     const createAppointment = async () => {
         const url = API_URL + 'api/appointment';
         try {
-            await axios.post(url, {
-                doctorId: doctorId,
-                date: date,
-                timeSlotId: selectedTimeSlot,
-            });
+            await axios.post(
+                url,
+                {
+                    doctorId: doctorId,
+                    date: date,
+                    timeSlotId: selectedTimeSlot,
+                },
+                {
+                    headers: headers,
+                }
+            );
 
             toast.success(
                 <div>

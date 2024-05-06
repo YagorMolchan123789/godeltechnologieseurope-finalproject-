@@ -378,6 +378,3 @@ FodyWeavers.xsd
 .DS_Store
 .env
 npm-debug.log
-
-#React Custom Environment Variables
-.env

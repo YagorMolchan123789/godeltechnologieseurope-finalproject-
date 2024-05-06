@@ -11,7 +11,7 @@ export default function Register() {
     const maxPasswordLength: number = 20;
     const minNameLength: number = 1;
     const maxNameLength: number = 20;
-    const urlRegister: string = process.env.REACT_APP_API_URL + 'register';
+    const urlRegister: string = process.env.REACT_APP_API_URL + 'api/register';
 
     const inputEmail = useRef<HTMLInputElement>(null);
     const inputPassword = useRef<HTMLInputElement>(null);
@@ -51,7 +51,7 @@ export default function Register() {
                     lastName: lastNameValue,
                 });
 
-                if (response.status === 200) {
+                if (response.status === 201) {
                     setInfoMessage(successMessage);
                     setInfoMessageClass('success');
                 }

@@ -1,6 +1,8 @@
 ﻿using MedicalCenter.Business;
 using MedicalCenter.Business.Services.Interfaces;
 using MedicalCenter.Data.Entities;
+using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,13 +10,24 @@ namespace MedicalCenter.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class AppointmentController(
         UserManager<AppUser> userManager,
         IAppointmentService appointmentService
         ) : ControllerBase
     {
+        /// <summary>
+        /// Get users appointments by userId 
+        /// </summary>
+        /// <response code="200">Appointments was successfully found for current user</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="500">Error while appointment creating</response>
         [HttpGet]
-        public async Task<IActionResult> GetByUserIdAsync()
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAsync()
         {
             var user = await userManager.GetUserAsync(User);
 
@@ -27,8 +40,17 @@ namespace MedicalCenter.Api.Controllers
 
             return Ok(appointments);
         }
-
+        /// <summary>
+        /// Remove appointment by Id
+        /// </summary>
+        /// <param name="appointmentId">appointment Id</param>
+        /// <returns>Status code</returns>
         [HttpDelete]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("{appointmentId}")]
         public async Task<IActionResult> DeleteAsync(int appointmentId)
         {
@@ -49,8 +71,18 @@ namespace MedicalCenter.Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Create appointment
+        /// </summary>
+        /// <response code="201">Appointment was successfully created</response>
+        /// <response code="404">The user or doctor does not exist</response>
+        /// <response code="500">Error while appointment creating</response>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateAppointmentModel model)
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PostAsync([FromBody] CreateAppointmentModel model)
         {
             var user = await userManager.GetUserAsync(User);
 
@@ -63,7 +95,7 @@ namespace MedicalCenter.Api.Controllers
 
             if (doctor is null || !await userManager.IsInRoleAsync(doctor, "doctor"))
             {
-                return BadRequest("Doctor not found");
+                return NotFound("Doctor not found");
             }
 
             try
@@ -76,21 +108,6 @@ namespace MedicalCenter.Api.Controllers
             }
 
             return Created("/user/appointments", model);
-
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            var user = await userManager.GetUserAsync(User);
-
-            if (user is null)
-            {
-                return Unauthorized();
-            }
-
-            var appointments = await appointmentService.GetUserAppointmentsAsync(user.Id);
-            return Ok(appointments);
         }
     }
 }

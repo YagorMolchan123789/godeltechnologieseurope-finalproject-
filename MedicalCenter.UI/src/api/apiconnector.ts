@@ -7,7 +7,7 @@ const apiConnector = {
     getAllDoctors: async (): Promise<getAllDoctorsDto> => {
         try {
             const accessToken = localStorage.getItem('accessToken');
-            const url = API_URL + 'api/doctor';
+            const url = API_URL + 'api/doctor/doctors';
 
             const api = axios.create({
                 headers: {
