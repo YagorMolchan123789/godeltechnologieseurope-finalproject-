@@ -48,8 +48,18 @@ const apiConnector = {
     },
     getUserAppointments: async (): Promise<userAppointment[]> => {
         try {
+            const accessToken = localStorage.getItem('accessToken');
             const { data } = await axios.get<userAppointment[]>(
-                API_URL + 'api/appointment'
+                API_URL + 'api/appointment',
+                {
+                    headers: {
+                        Authorization: accessToken,
+                        'Access-Control-Allow-Headers': '*',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': '*',
+                        Allow: '*',
+                    },
+                }
             );
             return data;
         } catch (error: unknown) {
@@ -59,8 +69,16 @@ const apiConnector = {
     },
     cancelAppointment: async (id: number) => {
         try {
+            const accessToken = localStorage.getItem('accessToken');
             await axios.delete(API_URL + 'api/appointment', {
                 params: { id },
+                headers: {
+                    Authorization: accessToken,
+                    'Access-Control-Allow-Headers': '*',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': '*',
+                    Allow: '*',
+                },
             });
         } catch (error: unknown) {
             console.error('Failed to cancel appointment:', error);

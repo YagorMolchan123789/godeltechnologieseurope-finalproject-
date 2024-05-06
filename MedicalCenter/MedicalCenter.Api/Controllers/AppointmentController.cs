@@ -36,7 +36,7 @@ namespace MedicalCenter.Api.Controllers
                 return Unauthorized();
             }
 
-            var appointments = appointmentService.GetByUserIdAsync(user.Id);
+            var appointments = await appointmentService.GetUserAppointmentsAsync(user.Id);
 
             return Ok(appointments);
         }

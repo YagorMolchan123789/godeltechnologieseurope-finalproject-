@@ -23,11 +23,11 @@ const router = createBrowserRouter([
                 element: <Home />,
             },
             {
-                path: 'appointment/create/:doctorId',
+                path: '/appointment/create/:doctorId',
                 element: <AppointmentTimeForm />,
             },
             {
-                path: 'doctors',
+                path: '/doctors',
                 element: <DoctorGrid />,
             },
             {
@@ -43,7 +43,7 @@ const router = createBrowserRouter([
                 element: <RegisterDoctor />,
             },
             {
-                path: '/user/appointment',
+                path: '/user/appointments',
                 element: <UserAppointments />,
             },
         ],

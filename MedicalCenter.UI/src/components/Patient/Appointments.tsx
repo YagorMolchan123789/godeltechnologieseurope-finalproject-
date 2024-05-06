@@ -21,9 +21,8 @@ export default function UserAppointments() {
         await apiConnector.cancelAppointment(id);
     };
 
-    return (
-        <Container className="justify-content-center">
-            <h1 className="text-center">Appointments</h1>
+    const renderContent = () => {
+        return (
             <Row className="justify-content-center">
                 <Tabs
                     defaultActiveKey="upcoming"
@@ -33,56 +32,59 @@ export default function UserAppointments() {
                 >
                     <Tab eventKey="upcoming" title="Upcoming">
                         <Row className="justify-content-center">
-                            {appointments.length !== 0 &&
-                                appointments
-                                    .filter(
-                                        (appointment) => !appointment.isPast
-                                    )
-                                    .map((appointment) => (
-                                        <Row
+                            {appointments
+                                .filter((appointment) => !appointment.isPast)
+                                .map((appointment) => (
+                                    <Row
+                                        key={appointment.id}
+                                        md={2}
+                                        className="justify-content-center mb-3"
+                                    >
+                                        <AppointmentCard
                                             key={appointment.id}
-                                            md={2}
-                                            className="justify-content-center mb-3"
-                                        >
-                                            <AppointmentCard
-                                                key={appointment.id}
-                                                data={appointment}
-                                                onCancel={() =>
-                                                    onCancelHandler(
-                                                        appointment.id
-                                                    )
-                                                }
-                                            />
-                                        </Row>
-                                    ))}
+                                            data={appointment}
+                                            onCancel={() =>
+                                                onCancelHandler(appointment.id)
+                                            }
+                                        />
+                                    </Row>
+                                ))}
                         </Row>
                     </Tab>
                     <Tab eventKey="past" title="Past">
                         <Row className="justify-content-center">
-                            {appointments.length !== 0 &&
-                                appointments
-                                    .filter((appointment) => appointment.isPast)
-                                    .map((appointment) => (
-                                        <Row
+                            {appointments
+                                .filter((appointment) => appointment.isPast)
+                                .map((appointment) => (
+                                    <Row
+                                        key={appointment.id}
+                                        md={2}
+                                        className="justify-content-center mb-3"
+                                    >
+                                        <AppointmentCard
                                             key={appointment.id}
-                                            md={2}
-                                            className="justify-content-center mb-3"
-                                        >
-                                            <AppointmentCard
-                                                key={appointment.id}
-                                                data={appointment}
-                                                onCancel={() =>
-                                                    onCancelHandler(
-                                                        appointment.id
-                                                    )
-                                                }
-                                            />
-                                        </Row>
-                                    ))}
+                                            data={appointment}
+                                            onCancel={() =>
+                                                onCancelHandler(appointment.id)
+                                            }
+                                        />
+                                    </Row>
+                                ))}
                         </Row>
                     </Tab>
                 </Tabs>
             </Row>
+        );
+    };
+
+    return (
+        <Container className="justify-content-center">
+            <h1 className="text-center">
+                {appointments.length == 0
+                    ? "You don't have any appointments"
+                    : 'Appointments'}
+            </h1>
+            {appointments.length !== 0 && renderContent()}
         </Container>
     );
 }

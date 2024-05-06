@@ -23,7 +23,7 @@ export default function Header() {
             return (
                 <Nav>
                     <Nav.Item as="li">
-                        <Link className="nav-home" to="/profile">
+                        <Link className="nav-home" to="/user/appointments">
                             User profile
                         </Link>
                     </Nav.Item>
@@ -33,12 +33,9 @@ export default function Header() {
                         </Link>
                     </Nav.Item>
                     <Nav.Item as="li">
-                            <Nav.Link
-                                className="nav-home"
-                                onClick={logOutHandler}
-                            >
-                                Log out
-                            </Nav.Link>
+                        <Nav.Link className="nav-home" onClick={logOutHandler}>
+                            Log out
+                        </Nav.Link>
                     </Nav.Item>
                 </Nav>
             );
