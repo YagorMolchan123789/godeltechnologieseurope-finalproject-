@@ -1,6 +1,6 @@
 ﻿using MedicalCenter.Business;
 using MedicalCenter.Business.Services.Interfaces;
-using MedicalCenter.Domain;
+using MedicalCenter.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -77,6 +77,20 @@ namespace MedicalCenter.Api.Controllers
 
             return Created("/user/appointments", model);
 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var user = await userManager.GetUserAsync(User);
+
+            if (user is null)
+            {
+                return Unauthorized();
+            }
+
+            var appointments = await appointmentService.GetUserAppointmentsAsync(user.Id);
+            return Ok(appointments);
         }
     }
 }

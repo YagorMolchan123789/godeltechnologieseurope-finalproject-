@@ -1,10 +1,10 @@
 ﻿using MedicalCenter.Api.Helpers.Mappers;
 using MedicalCenter.Api.Models;
 using MedicalCenter.Business.Services.Interfaces;
-using MedicalCenter.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MedicalCenter.Data.Entities;
 
 namespace MedicalCenter.Api.Controllers
 {

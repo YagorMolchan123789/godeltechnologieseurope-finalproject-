@@ -1,5 +1,6 @@
 ﻿using MedicalCenter.Business.Services.Interfaces;
 using MedicalCenter.Data.Entities;
+using MedicalCenter.Data.Models;
 using MedicalCenter.Data.Repositories.Interfaces;
 
 namespace MedicalCenter.Business.Services
@@ -39,6 +40,11 @@ namespace MedicalCenter.Business.Services
             {
                 await appointmentRepository.DeleteAsync(appointment);
             }
+        }
+        
+        public async Task<IReadOnlyList<AppointmentView>> GetUserAppointmentsAsync(string userId)
+        {
+            return await appointmentRepository.GetUserAppointmentsAsync(userId);
         }
     }
 }

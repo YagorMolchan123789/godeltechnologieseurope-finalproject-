@@ -1,6 +1,6 @@
-using MedicalCenter.Api.Models;
+﻿using MedicalCenter.Api.Models;
 using MedicalCenter.Business.Services.Interfaces;
-using MedicalCenter.Domain;
+using MedicalCenter.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +11,7 @@ namespace MedicalCenter.Api.Controllers
     [ApiController]
     [Authorize]
     public class TimeSlotController(
-        UserManager<AppUser> userManager, 
+        UserManager<AppUser> userManager,
         ITimeSlotService timeSlotService) : ControllerBase
     {
         [HttpGet("available")]

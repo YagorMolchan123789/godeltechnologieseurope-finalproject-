@@ -1,4 +1,4 @@
-﻿using MedicalCenter.Domain;
+﻿using MedicalCenter.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,18 +10,9 @@ namespace MedicalCenter.Data.Configurations
         {
             builder
                 .HasOne<AppUser>()
-                .WithOne()
-                .HasForeignKey<DoctorInfo>(x => x.AppUserId);
-
-            builder
-                .HasKey(x => x.AppUserId);
-
-            builder
-                .HasIndex(x => x.AppUserId);
-
-            builder
-                .Property(x => x.AppUserId)
-                .ValueGeneratedNever();
+                .WithOne(u => u.DoctorInfo)
+                .HasForeignKey<DoctorInfo>(x => x.AppUserId)
+                .IsRequired();
 
             builder
                 .Property(x => x.AppUserId)

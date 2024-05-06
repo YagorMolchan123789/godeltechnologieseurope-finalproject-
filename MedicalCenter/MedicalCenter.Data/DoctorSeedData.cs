@@ -1,5 +1,5 @@
-﻿using MedicalCenter.Data.Repositories.Interfaces;
-using MedicalCenter.Domain;
+﻿using MedicalCenter.Data.Entities;
+using MedicalCenter.Data.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 

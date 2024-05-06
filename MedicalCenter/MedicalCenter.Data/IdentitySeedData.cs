@@ -1,4 +1,4 @@
-﻿using MedicalCenter.Domain;
+﻿using MedicalCenter.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 

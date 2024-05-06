@@ -1,4 +1,4 @@
-﻿using MedicalCenter.Domain;
+﻿using MedicalCenter.Data.Entities;
 
 namespace MedicalCenter.Business.Services.Interfaces
 {

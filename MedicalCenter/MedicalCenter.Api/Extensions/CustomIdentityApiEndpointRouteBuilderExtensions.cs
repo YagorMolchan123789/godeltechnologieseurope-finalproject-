@@ -4,8 +4,8 @@ using System.Text;
 using FluentValidation;
 using MedicalCenter.Api.Models;
 using MedicalCenter.Api.Models.Interfaces;
+using MedicalCenter.Data.Entities;
 using MedicalCenter.Data.Repositories.Interfaces;
-using MedicalCenter.Domain;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Http.Metadata;
@@ -236,13 +236,15 @@ namespace MedicalCenter.Api.Extensions
 
             if (roleName == "doctor")
             {
-                var doctorInfo = new DoctorInfo();
-
                 var doctorRegistration = (RegisterDoctorRequest)registration;
 
-                doctorInfo.AppUserId = user.Id;
-                doctorInfo.PracticeStartDate = doctorRegistration.PracticeStartDate;
-                doctorInfo.Specialization = doctorRegistration.Specialization;
+
+                var doctorInfo = new DoctorInfo()
+                {
+                    AppUserId = user.Id,
+                    PracticeStartDate = doctorRegistration.PracticeStartDate,
+                    Specialization = doctorRegistration.Specialization,
+                };
 
                 var doctorRepository = sp.GetRequiredService<IDoctorRepository>();
 

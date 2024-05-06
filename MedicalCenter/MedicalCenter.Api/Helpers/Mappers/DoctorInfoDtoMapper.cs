@@ -1,5 +1,5 @@
 ﻿using MedicalCenter.Api.Models;
-using MedicalCenter.Domain;
+using MedicalCenter.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace MedicalCenter.Api.Helpers.Mappers

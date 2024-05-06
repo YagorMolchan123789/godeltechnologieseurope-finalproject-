@@ -1,7 +1,7 @@
 ﻿using MedicalCenter.Api.Extensions;
 using MedicalCenter.Business;
 using MedicalCenter.Data;
-using MedicalCenter.Domain;
+using MedicalCenter.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;

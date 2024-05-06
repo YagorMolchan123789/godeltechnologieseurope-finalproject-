@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Alert from 'react-bootstrap/Alert';
 import { toast } from 'react-toastify';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { Col } from 'react-bootstrap';
 import DoctorImage from '../doctors/DoctorImage';
 
@@ -52,6 +52,7 @@ export const AppointmentTimeForm = () => {
         'Access-Control-Allow-Methods': '*',
         Allow: '*',
     };
+    const navigate = useNavigate();
 
     const loadTimeSlots = async (e: React.ChangeEvent<HTMLDataElement>) => {
         const selectedDate = e.target.value;
@@ -138,6 +139,7 @@ export const AppointmentTimeForm = () => {
                     autoClose: 6000,
                 }
             );
+            navigate('/user/appointment');
         } catch (error) {
             console.error(error);
         }

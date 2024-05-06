@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalCenter.Api", "MedicalCenter.Api\MedicalCenter.Api.csproj", "{2FA3BBD8-E849-409D-A65A-A989022BEF4F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{79E774CD-008F-45FB-B668-F1A776FF2C63} = {79E774CD-008F-45FB-B668-F1A776FF2C63}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalCenter.Data", "MedicalCenter.Data\MedicalCenter.Data.csproj", "{33C150B5-5344-4F87-84E8-E7F2B08594E8}"
 EndProject
@@ -16,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalCenter.Business", "MedicalCenter.Business\MedicalCenter.Business.csproj", "{E03645ED-2838-40E7-A74B-BD01A4BAE41C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalCenter.Domain", "MedicalCenter.Domain\MedicalCenter.Domain.csproj", "{79E774CD-008F-45FB-B668-F1A776FF2C63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +32,6 @@ Global
 		{E03645ED-2838-40E7-A74B-BD01A4BAE41C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E03645ED-2838-40E7-A74B-BD01A4BAE41C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E03645ED-2838-40E7-A74B-BD01A4BAE41C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{79E774CD-008F-45FB-B668-F1A776FF2C63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{79E774CD-008F-45FB-B668-F1A776FF2C63}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{79E774CD-008F-45FB-B668-F1A776FF2C63}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{79E774CD-008F-45FB-B668-F1A776FF2C63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

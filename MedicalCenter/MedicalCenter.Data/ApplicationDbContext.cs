@@ -1,8 +1,9 @@
 ﻿using MedicalCenter.Data.Entities;
-﻿using System.Reflection;
-using MedicalCenter.Domain;
+using System.Reflection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
+using System.Reflection.Metadata;
 
 namespace MedicalCenter.Data
 {
@@ -42,7 +43,7 @@ namespace MedicalCenter.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
+
             builder.Entity<TimeSlot>().HasData(GenerateTimeSlots());
 
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
