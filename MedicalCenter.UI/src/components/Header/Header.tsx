@@ -64,12 +64,12 @@ export default function Header() {
     }
 
     return (
-        <Navbar className="nav-header">
-            <Container>
-                <Link className="nav-home" to="/">
+        <Navbar id="menu" className="nav-header bg-light">
+            <Container className="menu-container">
+                <Link className="menu-home" to="/">
                     Medical center
                 </Link>
-                <Nav className="security-container" as="ul">
+                <Nav className="security-menu" as="div">
                     {renderNavs()}
                 </Nav>
             </Container>
