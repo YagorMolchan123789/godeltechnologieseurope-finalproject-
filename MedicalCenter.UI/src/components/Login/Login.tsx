@@ -60,6 +60,9 @@ export default function Login() {
                 setInfoMessage(failMessage);
                 setInfoMessageClass('fail');
             }
+        } else {
+            setInfoMessage(wrongRequest);
+            setInfoMessageClass('fail');
         }
 
         function validateForm(): boolean {

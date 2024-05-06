@@ -24,6 +24,7 @@ export default function Register() {
     const wrongRequest: string =
         'It is similar to that a user with this email already exists!';
     const failMessage: string = 'Something went wrong! Please try again later!';
+    const wrongCredentials: string = 'Please, check your credentials!';
 
     const [validated, setValidated] = useState(false);
     const [infoMessage, setInfoMessage] = useState('');
@@ -65,6 +66,9 @@ export default function Register() {
                 setInfoMessage(failMessage);
                 setInfoMessageClass('fail');
             }
+        } else {
+            setInfoMessage(wrongCredentials);
+            setInfoMessageClass('fail');
         }
 
         function validateForm(): boolean {

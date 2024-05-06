@@ -14,7 +14,7 @@ export default function RegisterDoctor() {
     const minSpecializationLength: number = 1;
     const maxSpecializationLength: number = 50;
     const urlRegisterDoctor: string =
-        process.env.REACT_APP_API_URL + 'register-doctor';
+        process.env.REACT_APP_API_URL + 'api/doctor/doctors';
 
     const date: Date = new Date();
 
@@ -30,6 +30,7 @@ export default function RegisterDoctor() {
     const wrongRequest: string =
         'It is similar to that a doctor with this email already exists!';
     const failMessage: string = 'Something went wrong! Please try again later!';
+    const wrongCredentials: string = 'Please, check your credentials!';
 
     const [validated, setValidated] = useState(false);
     const [infoMessage, setInfoMessage] = useState('');
@@ -75,7 +76,7 @@ export default function RegisterDoctor() {
                     specialization: specializationValue,
                 });
 
-                if (response.status === 200) {
+                if (response.status === 201) {
                     setInfoMessage(successMessage);
                     setInfoMessageClass('success');
                 }
@@ -89,6 +90,9 @@ export default function RegisterDoctor() {
                 setInfoMessage(failMessage);
                 setInfoMessageClass('fail');
             }
+        } else {
+            setInfoMessage(wrongCredentials);
+            setInfoMessageClass('fail');
         }
 
         function validateForm(): boolean {
