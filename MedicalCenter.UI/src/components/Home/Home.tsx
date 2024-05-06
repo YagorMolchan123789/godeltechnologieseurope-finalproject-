@@ -52,7 +52,7 @@ export const Home = () => {
                     </Row>
                     <Row>
                         <Button className="btn-home" onClick={calltoAction}>
-                            Call to action
+                            Book an appointment
                         </Button>
                     </Row>
                 </Col>
