@@ -2,16 +2,16 @@
 using System.Diagnostics;
 using System.Text;
 using FluentValidation;
-using MedicalCenter.Domain;
 using MedicalCenter.Api.Models;
+using MedicalCenter.Api.Models.Interfaces;
+using MedicalCenter.Data.Repositories.Interfaces;
+using MedicalCenter.Domain;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.Extensions.Options;
-using MedicalCenter.Data.Repositories.Interfaces;
-using MedicalCenter.Api.Models.Interfaces;
 
 namespace MedicalCenter.Api.Extensions
 {

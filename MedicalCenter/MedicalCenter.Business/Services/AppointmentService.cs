@@ -1,4 +1,4 @@
-﻿using MedicalCenter.Business.Interfaces;
+﻿using MedicalCenter.Business.Services.Interfaces;
 using MedicalCenter.Data.Entities;
 using MedicalCenter.Data.Repositories.Interfaces;
 
@@ -24,6 +24,21 @@ namespace MedicalCenter.Business.Services
             };
 
             await appointmentRepository.CreateAsync(appointment);
+        }
+
+        public Task<List<Appointment>> GetByUserIdAsync(string userId)
+        {
+            return appointmentRepository.GetByUserIdAsync(userId);
+        }
+
+        public async Task DeleteAsync(string userId, int appointmentId)
+        {
+            var appointment = (await appointmentRepository.GetByUserIdAsync(userId)).FirstOrDefault(x => x.Id == appointmentId);
+
+            if (appointment != null)
+            {
+                await appointmentRepository.DeleteAsync(appointment);
+            }
         }
     }
 }

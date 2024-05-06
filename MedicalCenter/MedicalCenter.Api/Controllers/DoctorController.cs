@@ -2,8 +2,8 @@
 using MedicalCenter.Api.Models;
 using MedicalCenter.Business.Services.Interfaces;
 using MedicalCenter.Domain;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalCenter.Api.Controllers

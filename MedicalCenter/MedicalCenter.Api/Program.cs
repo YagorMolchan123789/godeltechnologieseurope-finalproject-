@@ -1,5 +1,4 @@
 ﻿using MedicalCenter.Api.Extensions;
-using MedicalCenter.Api.Helpers.Mappers;
 using MedicalCenter.Business;
 using MedicalCenter.Data;
 using MedicalCenter.Domain;

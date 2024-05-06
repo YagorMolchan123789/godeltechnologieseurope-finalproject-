@@ -1,5 +1,5 @@
-﻿using MedicalCenter.Api.Models;
-using MedicalCenter.Business.Interfaces;
+using MedicalCenter.Api.Models;
+using MedicalCenter.Business.Services.Interfaces;
 using MedicalCenter.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +9,7 @@ namespace MedicalCenter.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TimeSlotController(
         UserManager<AppUser> userManager, 
         ITimeSlotService timeSlotService) : ControllerBase

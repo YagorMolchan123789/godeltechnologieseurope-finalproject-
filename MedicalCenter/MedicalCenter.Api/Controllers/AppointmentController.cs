@@ -1,7 +1,6 @@
 ﻿using MedicalCenter.Business;
-using MedicalCenter.Business.Interfaces;
+using MedicalCenter.Business.Services.Interfaces;
 using MedicalCenter.Domain;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,15 +13,51 @@ namespace MedicalCenter.Api.Controllers
         IAppointmentService appointmentService
         ) : ControllerBase
     {
+        [HttpGet]
+        public async Task<IActionResult> GetByUserIdAsync()
+        {
+            var user = await userManager.GetUserAsync(User);
+
+            if (user is null)
+            {
+                return Unauthorized();
+            }
+
+            var appointments = appointmentService.GetByUserIdAsync(user.Id);
+
+            return Ok(appointments);
+        }
+
+        [HttpDelete]
+        [Route("{appointmentId}")]
+        public async Task<IActionResult> DeleteAsync(int appointmentId)
+        {
+            var user = await userManager.GetUserAsync(User);
+
+            if (user is null)
+            {
+                return Unauthorized();
+            }
+
+            if (appointmentId <= 0)
+            {
+                return BadRequest();
+            }
+
+            await appointmentService.DeleteAsync(user.Id, appointmentId);
+
+            return Ok();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateAppointmentModel model)
         {
             var user = await userManager.GetUserAsync(User);
 
-            //if (user is null)
-            //{
-            //    return Unauthorized();
-            //}
+            if (user is null)
+            {
+                return Unauthorized();
+            }
 
             var doctor = await userManager.FindByIdAsync(model.DoctorId);
 
@@ -33,7 +68,7 @@ namespace MedicalCenter.Api.Controllers
 
             try
             {
-                await appointmentService.CreateAppointmentAsync(model.DoctorId, model);
+                await appointmentService.CreateAppointmentAsync(user.Id, model);
             }
             catch (Exception ex)
             {

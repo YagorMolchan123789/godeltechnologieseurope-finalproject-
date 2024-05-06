@@ -1,5 +1,5 @@
 ﻿using System;
-using MedicalCenter.Business.Interfaces;
+using MedicalCenter.Business.Services.Interfaces;
 using MedicalCenter.Data.Entities;
 using MedicalCenter.Data.Repositories.Interfaces;
 
