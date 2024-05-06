@@ -33,9 +33,13 @@ export default function Header() {
                         </Link>
                     </Nav.Item>
                     <Nav.Item as="li">
-                        <Nav.Link className="nav-home" onClick={logOutHandler}>
+                        <Link
+                            className="nav-home"
+                            onClick={logOutHandler}
+                            to="/"
+                        >
                             Log out
-                        </Nav.Link>
+                        </Link>
                     </Nav.Item>
                 </Nav>
             );

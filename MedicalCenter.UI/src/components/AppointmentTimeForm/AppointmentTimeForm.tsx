@@ -69,7 +69,7 @@ export const AppointmentTimeForm = () => {
             return;
         }
 
-        const url = API_URL + 'api/timeslot/available';
+        const url = API_URL + 'api/timeslot/available?api-version=1.0';
 
         const requestParams: GetTimeSlotsRequest = {
             doctorId: doctorId ?? '',
@@ -145,7 +145,7 @@ export const AppointmentTimeForm = () => {
                     autoClose: 6000,
                 }
             );
-            navigate('/user/appointment');
+            navigate('/user/appointments');
         } catch (error) {
             console.error(error);
         }
