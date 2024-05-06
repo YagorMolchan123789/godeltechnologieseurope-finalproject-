@@ -4,9 +4,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace MedicalCenter.Data
 {
-    public static class AdminSeedData
+    public static class IdentitySeedData
     {
-        public static async Task CreateAdminAccountAsync(IServiceProvider serviceProvider)
+        public static async Task CreateAdminAccountAsync(IServiceProvider
+                serviceProvider)
         {
             using var scope = serviceProvider.CreateScope();
             var scopedProvider = scope.ServiceProvider;
@@ -14,7 +15,7 @@ namespace MedicalCenter.Data
             var userManager = scopedProvider.GetRequiredService<UserManager<AppUser>>();
             var roleManager = scopedProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            var username = "admin@admin.com";
+            var username = "Admin";
             var role = "admin";
             var email = "admin@admin.com";
             var password = "Admin123!";
@@ -32,8 +33,8 @@ namespace MedicalCenter.Data
                     Email = email
                 };
 
-                IdentityResult result = await userManager.CreateAsync(user, password);
-                
+                IdentityResult result = await userManager
+                    .CreateAsync(user, password);
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(user, role);

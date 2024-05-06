@@ -111,8 +111,8 @@ try
 
     app.MapControllers();
 
+    await IdentitySeedData.CreateAdminAccountAsync(app.Services);
     await DoctorSeedData.CreateDoctorsAccountAsync(app.Services);
-    await AdminSeedData.CreateAdminAccountAsync(app.Services);
 
     await app.RunAsync();
 }

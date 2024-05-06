@@ -1,18 +1,26 @@
-import { DoctorDto } from '../../models/doctorDto';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import apiConnector from '../../api/apiconnector';
 import { Col, Row } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DoctorCard from './DoctorCard';
+import { getAllDoctorsDto } from '../../models/getAllDoctorsDto';
+import { DoctorDto } from '../../models/doctorDto';
 
 export default function DoctorGrid() {
-    const [doctors, setDoctors] = useState<DoctorDto[]>([]);
+    const [data, setData] = useState<getAllDoctorsDto>({
+        doctorInfos: [],
+        isShowButton: false,
+    });
 
     useEffect(() => {
         const fetchData = async () => {
-            const fetchedDoctors = await apiConnector.getAllDoctors();
-            setDoctors(fetchedDoctors);
+            const response = await apiConnector.getAllDoctors();
+
+            setData({
+                doctorInfos: response.doctorInfos,
+                isShowButton: response.isShowButton,
+            });
         };
 
         fetchData();
@@ -27,10 +35,14 @@ export default function DoctorGrid() {
                 lg={3}
                 className="justify-content-center doctor-row-container"
             >
-                {doctors.length !== 0 &&
-                    doctors.map((doctor, index) => (
+                {data.doctorInfos.length !== 0 &&
+                    data.doctorInfos.map((doctor: DoctorDto, index: number) => (
                         <Col key={doctor.appUserId} className="doctor-col">
-                            <DoctorCard key={index} doctor={doctor} />
+                            <DoctorCard
+                                key={index}
+                                doctor={doctor}
+                                isAdmin={data.isShowButton}
+                            />
                         </Col>
                     ))}
             </Row>

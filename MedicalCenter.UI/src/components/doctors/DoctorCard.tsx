@@ -4,12 +4,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { DoctorDto } from '../../models/doctorDto';
 import DoctorImage from './DoctorImage';
 import { Link } from 'react-router-dom';
+import apiConnector from '../../api/apiconnector';
 
 interface Props {
     doctor: DoctorDto;
+    isAdmin: boolean;
 }
 
-function DoctorCard({ doctor }: Props) {
+function DoctorCard({ doctor, isAdmin }: Props) {
     return (
         <Card
             className="doctor-card"
@@ -35,6 +37,17 @@ function DoctorCard({ doctor }: Props) {
                 >
                     <Button variant="primary">Choose time</Button>
                 </Link>
+                {isAdmin && (
+                    <Button
+                        variant="danger"
+                        onClick={async () => {
+                            await apiConnector.deleteDoctor(doctor.appUserId);
+                            window.location.reload();
+                        }}
+                    >
+                        Delete doctor
+                    </Button>
+                )}
             </Card.Body>
         </Card>
     );

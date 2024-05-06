@@ -1,12 +1,12 @@
-import { DoctorDto } from '../models/doctorDto';
 import axios, { AxiosResponse } from 'axios';
+import { getAllDoctorsDto } from '../models/getAllDoctorsDto';
 const API_URL = process.env.REACT_APP_API_URL;
 
 const apiConnector = {
-    getAllDoctors: async (): Promise<DoctorDto[]> => {
+    getAllDoctors: async (): Promise<getAllDoctorsDto> => {
         try {
             const accessToken = localStorage.getItem('accessToken');
-            const url = API_URL + 'api/doctors';
+            const url = API_URL + 'api/doctor';
 
             const api = axios.create({
                 headers: {
@@ -18,15 +18,32 @@ const apiConnector = {
                 },
             });
 
-            const response: AxiosResponse<DoctorDto[]> = await api.get(url);
+            const response: AxiosResponse<getAllDoctorsDto> =
+                await api.get(url);
 
-            const data: DoctorDto[] = await response.data;
-
-            return data;
+            return response.data as getAllDoctorsDto;
         } catch (error: unknown) {
             console.error('Failed to fetch doctors:', error);
-            return [];
+            return {
+                doctorInfos: [],
+                isShowButton: false,
+            };
         }
+    },
+
+    deleteDoctor: async (doctorId: string): Promise<void> => {
+        const accessToken = localStorage.getItem('accessToken');
+        const url = API_URL + `api/doctor/${doctorId}`;
+
+        await axios.delete<string>(url, {
+            headers: {
+                Authorization: accessToken,
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': '*',
+                Allow: '*',
+            },
+        });
     },
 };
 
