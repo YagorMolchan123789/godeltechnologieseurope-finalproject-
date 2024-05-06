@@ -2,7 +2,7 @@ import './Login.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import axios, { AxiosError } from 'axios';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
@@ -10,7 +10,7 @@ export default function Login() {
     const maxEmailLength: number = 256;
     const minPasswordLength: number = 8;
     const maxPasswordLength: number = 20;
-    const urlRegister: string = process.env.REACT_APP_API_URL + 'login';
+    const urlLogin: string = process.env.REACT_APP_API_URL + 'login';
 
     const inputEmail = useRef<HTMLInputElement>(null);
     const inputPassword = useRef<HTMLInputElement>(null);
@@ -38,7 +38,7 @@ export default function Login() {
             setValidated(true);
 
             try {
-                const response = await axios.post(urlRegister, {
+                const response = await axios.post(urlLogin, {
                     email: emailValue,
                     password: passwordValue,
                 });
@@ -54,33 +54,30 @@ export default function Login() {
                 if ((error as AxiosError).response?.status === 401) {
                     setInfoMessage(wrongRequest);
                     setInfoMessageClass('fail');
-                } else {
-                    setInfoMessage(failMessage);
-                    setInfoMessageClass('fail');
+                    return;
                 }
+
+                setInfoMessage(failMessage);
+                setInfoMessageClass('fail');
             }
         }
 
         function validateForm(): boolean {
-            let result: boolean = true;
-
             if (
                 emailValue === undefined ||
                 emailValue.length < minEmailLength ||
                 emailValue.length > maxEmailLength
-            ) {
-                result = false;
-            }
+            )
+                return false;
 
             if (
                 passwordValue === undefined ||
                 passwordValue.length < minPasswordLength ||
                 passwordValue.length > maxPasswordLength
-            ) {
-                result = false;
-            }
+            )
+                return false;
 
-            return result;
+            return true;
         }
     }
 

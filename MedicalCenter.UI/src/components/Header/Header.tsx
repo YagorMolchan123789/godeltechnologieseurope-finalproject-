@@ -32,6 +32,14 @@ export default function Header() {
                             Choose Doctor
                         </Link>
                     </Nav.Item>
+                    <Nav.Item as="li">
+                            <Nav.Link
+                                className="nav-home"
+                                onClick={logOutHandler}
+                            >
+                                Log out
+                            </Nav.Link>
+                    </Nav.Item>
                 </Nav>
             );
         }
@@ -51,6 +59,9 @@ export default function Header() {
             </Nav>
         );
     };
+    function logOutHandler() {
+        localStorage.removeItem(accessTokenKey);
+    }
 
     return (
         <Navbar className="nav-header">

@@ -187,7 +187,7 @@ export const AppointmentTimeForm = () => {
             <Row className="justify-content-center align-items-center mt-3">
                 <Col xs={10} sm={6} md={3} lg={4}>
                     <DoctorImage
-                        imageUrl={doctor.photoUrl}
+                        imageNameWithType={doctor.photoUrl}
                         style={{ maxWidth: '100%', height: 'auto' }}
                     />
                 </Col>
