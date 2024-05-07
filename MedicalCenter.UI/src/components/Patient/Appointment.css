@@ -1,0 +1,15 @@
+.appointment-item {
+    border: none;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3px;
+}
+
+.appointment-cancel {
+    align-items: center;
+    height: 60%;
+}
+
+.appointment-cancel button {
+    margin-bottom: 3px;
+}

@@ -6,7 +6,6 @@ WORKDIR /app
 COPY MedicalCenter.Api/MedicalCenter.Api.csproj MedicalCenter.Api/MedicalCenter.Api.csproj
 COPY MedicalCenter.Business/MedicalCenter.Business.csproj MedicalCenter.Business/MedicalCenter.Business.csproj
 COPY MedicalCenter.Data/MedicalCenter.Data.csproj MedicalCenter.Data/MedicalCenter.Data.csproj
-COPY MedicalCenter.Domain/MedicalCenter.Domain.csproj MedicalCenter.Domain/MedicalCenter.Domain.csproj
 RUN dotnet restore MedicalCenter.Api/MedicalCenter.Api.csproj
 
 # Copy the rest of the application code

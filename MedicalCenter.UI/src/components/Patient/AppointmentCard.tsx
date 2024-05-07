@@ -1,5 +1,6 @@
 import { Button, Col, Row } from 'react-bootstrap';
 import { userAppointment } from '../../models/userAppointment';
+import './Appointment.css';
 
 interface Props {
     data: userAppointment;
@@ -13,13 +14,7 @@ const removeSeconds = (timeString: string): string => {
 
 function AppointmentCard({ data, onCancel }: Props) {
     return (
-        <Row
-            xs={1}
-            md={2}
-            lg={2}
-            style={{ border: 'none', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}
-            className="align-items-center mb-3"
-        >
+        <Row xs={1} md={2} lg={2} className="appointment-item">
             <Col>
                 <h3>
                     {data.doctorInfo.firstName} {data.doctorInfo.lastName}
@@ -31,16 +26,12 @@ function AppointmentCard({ data, onCancel }: Props) {
                     years of practice
                 </p>
             </Col>
-            <Col className="align-items-center">
+            <Col className="appointment-cancel">
                 <p>
                     Date: {data.date} {removeSeconds(data.time)}
                 </p>
                 {!data.isPast && (
-                    <Button
-                        variant="danger"
-                        onClick={onCancel}
-                        className="mb-3"
-                    >
+                    <Button variant="danger" onClick={onCancel}>
                         Cancel
                     </Button>
                 )}
