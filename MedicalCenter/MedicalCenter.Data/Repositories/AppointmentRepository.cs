@@ -41,6 +41,8 @@ namespace MedicalCenter.Data.Repositories
                 .Include(a => a.Doctor!)
                 .ThenInclude(d => d.DoctorInfo)
                 .Where(a => a.PatientId == userId)
+                .OrderBy(a => a.Date)
+                .ThenBy(a => a.TimeSlot.StartTime)
                 .Select(a => a.ToViewModel())
                 .ToListAsync();
 

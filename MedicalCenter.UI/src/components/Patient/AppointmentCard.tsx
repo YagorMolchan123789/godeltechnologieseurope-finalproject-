@@ -6,6 +6,11 @@ interface Props {
     onCancel: () => void;
 }
 
+const removeSeconds = (timeString: string): string => {
+    const [hours, minutes] = timeString.split(':');
+    return `${hours}:${minutes}`;
+};
+
 function AppointmentCard({ data, onCancel }: Props) {
     return (
         <Row
@@ -28,7 +33,7 @@ function AppointmentCard({ data, onCancel }: Props) {
             </Col>
             <Col className="align-items-center">
                 <p>
-                    Date: {data.date} {data.time}
+                    Date: {data.date} {removeSeconds(data.time)}
                 </p>
                 {!data.isPast && (
                     <Button
