@@ -1,10 +1,8 @@
-import React from 'react';
-import { Card, Button } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { DoctorDto } from '../../models/doctorDto';
-import DoctorImage from './DoctorImage';
+import { Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import apiConnector from '../../api/apiconnector';
+import { DoctorDto } from '../../models/doctorDto';
+import DoctorImage from './DoctorImage';
 
 interface Props {
     doctor: DoctorDto;

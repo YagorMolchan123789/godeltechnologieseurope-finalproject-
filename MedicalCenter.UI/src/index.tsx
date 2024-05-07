@@ -8,7 +8,6 @@ import DoctorGrid from './components/doctors/DoctorGrid';
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import RegisterDoctor from './components/RegisterDoctor/RegisterDoctor';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './global.css';
 import UserAppointments from './components/Patient/Appointments';
 

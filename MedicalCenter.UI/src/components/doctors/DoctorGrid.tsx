@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import apiConnector from '../../api/apiconnector';
 import { Col, Row } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import DoctorCard from './DoctorCard';
 import { getAllDoctorsDto } from '../../models/getAllDoctorsDto';
 import { DoctorDto } from '../../models/doctorDto';
