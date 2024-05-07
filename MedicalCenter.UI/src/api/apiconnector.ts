@@ -1,26 +1,29 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { getAllDoctorsDto } from '../models/getAllDoctorsDto';
 import { userAppointment } from '../models/userAppointment';
 const API_URL = process.env.REACT_APP_API_URL;
 
+const getAccessToken = (): string | null => {
+    return localStorage.getItem('accessToken');
+};
+
+const api = (): AxiosInstance =>
+    axios.create({
+        headers: {
+            Authorization: getAccessToken(),
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': '*',
+            Allow: '*',
+        },
+    });
+
 const apiConnector = {
     getAllDoctors: async (): Promise<getAllDoctorsDto> => {
         try {
-            const accessToken = localStorage.getItem('accessToken');
             const url = API_URL + 'api/doctors';
-
-            const api = axios.create({
-                headers: {
-                    Authorization: accessToken,
-                    'Access-Control-Allow-Headers': '*',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': '*',
-                    Allow: '*',
-                },
-            });
-
             const response: AxiosResponse<getAllDoctorsDto> =
-                await api.get(url);
+                await api().get(url);
 
             return response.data as getAllDoctorsDto;
         } catch (error: unknown) {
@@ -33,33 +36,13 @@ const apiConnector = {
     },
 
     deleteDoctor: async (doctorId: string): Promise<void> => {
-        const accessToken = localStorage.getItem('accessToken');
         const url = API_URL + `api/doctors/${doctorId}`;
-
-        await axios.delete<string>(url, {
-            headers: {
-                Authorization: accessToken,
-                'Access-Control-Allow-Headers': '*',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': '*',
-                Allow: '*',
-            },
-        });
+        await api().delete<string>(url);
     },
     getUserAppointments: async (): Promise<userAppointment[]> => {
         try {
-            const accessToken = localStorage.getItem('accessToken');
-            const { data } = await axios.get<userAppointment[]>(
-                API_URL + 'api/appointments',
-                {
-                    headers: {
-                        Authorization: accessToken,
-                        'Access-Control-Allow-Headers': '*',
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': '*',
-                        Allow: '*',
-                    },
-                }
+            const { data } = await api().get<userAppointment[]>(
+                API_URL + 'api/appointments'
             );
             return data;
         } catch (error: unknown) {
@@ -68,21 +51,8 @@ const apiConnector = {
         }
     },
     cancelAppointment: async (id: number) => {
-        try {
-            const accessToken = localStorage.getItem('accessToken');
-            await axios.delete(API_URL + 'api/appointments', {
-                params: { id },
-                headers: {
-                    Authorization: accessToken,
-                    'Access-Control-Allow-Headers': '*',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': '*',
-                    Allow: '*',
-                },
-            });
-        } catch (error: unknown) {
-            console.error('Failed to cancel appointment:', error);
-        }
+        const url = API_URL + `api/appointments/${id}`;
+        await api().delete(url);
     },
 };
 

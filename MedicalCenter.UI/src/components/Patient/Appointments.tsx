@@ -18,7 +18,12 @@ export default function UserAppointments() {
     }, []);
 
     const onCancelHandler = async (id: number) => {
-        await apiConnector.cancelAppointment(id);
+        try {
+            await apiConnector.cancelAppointment(id);
+            setAppointments(appointments.filter((a) => a.id !== id));
+        } catch (error: unknown) {
+            console.error('Failed to cancel appointment:', error);
+        }
     };
 
     const renderContent = () => {

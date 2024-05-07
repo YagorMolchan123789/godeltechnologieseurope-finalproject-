@@ -89,6 +89,10 @@ namespace MedicalCenter.Api.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> DeleteAsync(string doctorId)
         {
+            if (string.IsNullOrEmpty(doctorId) || doctorId.Length > UserIdMaxLength)
+            {
+                return BadRequest();
+            }
             var user = await _userManager.FindByIdAsync(doctorId);
 
             if (user == null)
@@ -96,12 +100,7 @@ namespace MedicalCenter.Api.Controllers
                 return NotFound();
             }
 
-            if (string.IsNullOrEmpty(doctorId) || doctorId.Length > UserIdMaxLength)
-            {
-                return BadRequest();
-            }
-
-            await _userManager.DeleteAsync(user);
+            await _doctorService.DeleteAsync(user);
 
             return NoContent();
         }

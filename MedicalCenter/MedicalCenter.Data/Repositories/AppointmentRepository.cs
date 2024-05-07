@@ -22,6 +22,13 @@ namespace MedicalCenter.Data.Repositories
             await context.SaveChangesAsync();
         }
 
+        public async Task DeleteByDoctorIdAsync(string doctorId)
+        {
+            var appointments = context.Appointments.Where(a => a.DoctorId == doctorId);
+            context.Appointments.RemoveRange(appointments);
+            await context.SaveChangesAsync();
+        }
+
         public async Task<List<Appointment>> GetByUserIdAsync(string userId)
         {
             return await context.Appointments

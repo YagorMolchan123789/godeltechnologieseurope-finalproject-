@@ -45,13 +45,12 @@ namespace MedicalCenter.Api.Controllers
         /// </summary>
         /// <param name="appointmentId">appointment Id</param>
         /// <returns>Status code</returns>
-        [HttpDelete]
+        [HttpDelete("{appointmentId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Route("{appointmentId}")]
         public async Task<IActionResult> DeleteAsync(int appointmentId)
         {
             var user = await userManager.GetUserAsync(User);

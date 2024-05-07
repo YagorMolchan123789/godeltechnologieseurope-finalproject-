@@ -9,7 +9,7 @@ namespace MedicalCenter.Data.Repositories.Interfaces
         Task<Appointment> CreateAsync(Appointment appointment);
         Task<IReadOnlyList<AppointmentView>> GetUserAppointmentsAsync(string userId);
         Task<bool> IsAnyAsync(string doctorId, DateOnly dateOnly, int timeSlotId);
-
         Task DeleteAsync(Appointment appointment);
+        Task DeleteByDoctorIdAsync(string doctorId);
     }
 }
