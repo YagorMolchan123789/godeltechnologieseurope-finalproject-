@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import apiConnector from '../../api/apiconnector';
 import { DoctorDto } from '../../models/doctorDto';
 import DoctorImage from './DoctorImage';
+import './Doctor.css';
 
 interface Props {
     doctor: DoctorDto;
-    isAdmin: boolean;
+    isShowButton: boolean;
 }
 
-function DoctorCard({ doctor, isAdmin }: Props) {
+function DoctorCard({ doctor, isShowButton }: Props) {
     return (
         <Card
             className="doctor-card"
@@ -35,7 +36,7 @@ function DoctorCard({ doctor, isAdmin }: Props) {
                 >
                     <Button variant="primary">Choose time</Button>
                 </Link>
-                {isAdmin && (
+                {isShowButton && (
                     <Button
                         variant="danger"
                         onClick={async () => {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import getPublicImageUrlByName from '../../utils/GetPublicImageUrl';
+import './Doctor.css';
 
 interface DoctorImageProps {
     imageNameWithType: string;

@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import apiConnector from '../../api/apiconnector';
-import { Col, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import DoctorCard from './DoctorCard';
 import { getAllDoctorsDto } from '../../models/getAllDoctorsDto';
 import { DoctorDto } from '../../models/doctorDto';
+import { Link } from 'react-router-dom';
+import './Doctor.css';
 
 export default function DoctorGrid() {
     const [data, setData] = useState<getAllDoctorsDto>({
@@ -27,7 +29,16 @@ export default function DoctorGrid() {
 
     return (
         <Container>
-            <h1 className="doctors-page-title">Our doctors</h1>
+            <h1 className="doctors-page-title mb-4">Our doctors</h1>
+            <Row className="mb-3">
+                {data.isShowButton && (
+                    <Col className="text-right">
+                        <Link to={'/../register-doctor/'} className="mb-3">
+                            <Button variant="success">Create Doctor</Button>
+                        </Link>
+                    </Col>
+                )}
+            </Row>
             <Row
                 xs={1}
                 md={2}
@@ -36,11 +47,11 @@ export default function DoctorGrid() {
             >
                 {data.doctorInfos.length !== 0 &&
                     data.doctorInfos.map((doctor: DoctorDto, index: number) => (
-                        <Col key={doctor.appUserId} className="doctor-col">
+                        <Col key={doctor.appUserId} className="mb-4 doctor-col">
                             <DoctorCard
                                 key={index}
                                 doctor={doctor}
-                                isAdmin={data.isShowButton}
+                                isShowButton={data.isShowButton}
                             />
                         </Col>
                     ))}
