@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalCenter.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/appointments")]
     [ApiController]
     [ApiVersion("1.0")]
     public class AppointmentController(

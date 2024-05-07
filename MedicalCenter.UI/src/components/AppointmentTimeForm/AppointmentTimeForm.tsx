@@ -69,7 +69,7 @@ export const AppointmentTimeForm = () => {
             return;
         }
 
-        const url = API_URL + 'api/timeslot/available?api-version=1.0';
+        const url = API_URL + 'api/timeslots/available?api-version=1.0';
 
         const requestParams: GetTimeSlotsRequest = {
             doctorId: doctorId ?? '',
@@ -114,7 +114,7 @@ export const AppointmentTimeForm = () => {
     };
 
     const createAppointment = async () => {
-        const url = API_URL + 'api/appointment';
+        const url = API_URL + 'api/appointments';
         try {
             await axios.post(
                 url,

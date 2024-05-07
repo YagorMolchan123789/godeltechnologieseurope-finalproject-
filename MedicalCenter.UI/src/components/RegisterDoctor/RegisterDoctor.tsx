@@ -14,7 +14,7 @@ export default function RegisterDoctor() {
     const minSpecializationLength: number = 1;
     const maxSpecializationLength: number = 50;
     const urlRegisterDoctor: string =
-        process.env.REACT_APP_API_URL + 'api/doctor/doctors';
+        process.env.REACT_APP_API_URL + 'api/doctors';
 
     const date: Date = new Date();
 

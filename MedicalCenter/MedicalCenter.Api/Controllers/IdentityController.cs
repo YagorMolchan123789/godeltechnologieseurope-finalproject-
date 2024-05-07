@@ -4,7 +4,6 @@ using FluentValidation;
 using MedicalCenter.Api.Models;
 using MedicalCenter.Api.Services;
 using MedicalCenter.Data.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -116,23 +115,6 @@ namespace MedicalCenter.Api.Controllers
 
             // The signInManager already produced the needed response in the form of a cookie or bearer token.
             return Empty;
-        }
-
-        /// <summary>
-        /// Check admin rights
-        /// </summary>
-        /// <response code="200">Admin rights check success</response>
-        /// <response code="401">User no login</response>
-        /// <response code="403">User is no admin</response>
-        [HttpGet]
-        [Route("check-admin")]
-        [Authorize(Roles = "admin")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public IActionResult CheckAdmin()
-        {
-            return Ok();
         }
     }
 }

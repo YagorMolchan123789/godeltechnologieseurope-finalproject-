@@ -7,7 +7,7 @@ const apiConnector = {
     getAllDoctors: async (): Promise<getAllDoctorsDto> => {
         try {
             const accessToken = localStorage.getItem('accessToken');
-            const url = API_URL + 'api/doctor/doctors';
+            const url = API_URL + 'api/doctors';
 
             const api = axios.create({
                 headers: {
@@ -34,7 +34,7 @@ const apiConnector = {
 
     deleteDoctor: async (doctorId: string): Promise<void> => {
         const accessToken = localStorage.getItem('accessToken');
-        const url = API_URL + `api/doctor/${doctorId}`;
+        const url = API_URL + `api/doctors/${doctorId}`;
 
         await axios.delete<string>(url, {
             headers: {
@@ -50,7 +50,7 @@ const apiConnector = {
         try {
             const accessToken = localStorage.getItem('accessToken');
             const { data } = await axios.get<userAppointment[]>(
-                API_URL + 'api/appointment',
+                API_URL + 'api/appointments',
                 {
                     headers: {
                         Authorization: accessToken,
@@ -70,7 +70,7 @@ const apiConnector = {
     cancelAppointment: async (id: number) => {
         try {
             const accessToken = localStorage.getItem('accessToken');
-            await axios.delete(API_URL + 'api/appointment', {
+            await axios.delete(API_URL + 'api/appointments', {
                 params: { id },
                 headers: {
                     Authorization: accessToken,

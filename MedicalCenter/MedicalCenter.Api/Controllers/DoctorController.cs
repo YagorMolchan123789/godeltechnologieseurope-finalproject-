@@ -14,7 +14,7 @@ namespace MedicalCenter.Api.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/doctors")]
     [ApiVersion("1.0")]
     public class DoctorController : Controller
     {
@@ -47,7 +47,6 @@ namespace MedicalCenter.Api.Controllers
         /// <response code="200">Get a list of available doctors</response>
         /// <response code="401">User is not registered</response>
         [HttpGet]
-        [Route("doctors")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -115,7 +114,6 @@ namespace MedicalCenter.Api.Controllers
         /// <response code="401">User no login</response>
         /// <response code="403">User is no admin</response>
         [HttpPost]
-        [Route("doctors")]
         [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
