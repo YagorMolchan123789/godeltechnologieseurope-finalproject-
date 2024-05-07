@@ -38,6 +38,7 @@ function DoctorCard({ doctor, isShowButton }: Props) {
                 </Link>
                 {isShowButton && (
                     <Button
+                        className="mx-3"
                         variant="danger"
                         onClick={async () => {
                             await apiConnector.deleteDoctor(doctor.appUserId);
