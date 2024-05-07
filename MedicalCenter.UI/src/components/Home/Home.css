@@ -3,6 +3,10 @@
     background-position: center;
 }
 
+.home-container img {
+    margin-top: -1%;
+}
+
 .home-content {
     background-color: rgba(255, 255, 255, 0.3);
     max-width: 550px;
@@ -24,4 +28,9 @@
 
 .home-paragraph {
     color: white;
+}
+
+.home-content .row:last-child {
+    margin-right: 0;
+    margin-left: 0;
 }
