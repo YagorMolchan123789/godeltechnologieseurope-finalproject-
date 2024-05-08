@@ -13,6 +13,7 @@ RUN export REACT_APP_API_URL=${API_URL} && env && npm run build
 
 # Final image
 FROM nginx:stable-alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
